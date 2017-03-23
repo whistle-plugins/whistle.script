@@ -1,0 +1,25 @@
+{
+  "name": "whistle.inspect",
+  "description": "Programmable plugin for whistle",
+  "version": "0.0.0",
+  "author": "avenwu <avenwu@vip.qq.com>",
+  "contributors": [],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/whistle-plugins/whistle.inspect/issues"
+  },
+  "homepage": "https://github.com/whistle-plugins/whistle.inspect",
+  "keywords": [
+    "whistle",
+    "proxy",
+    "ssi"
+  ],
+  "registry": "https://github.com/whistle-plugins/whistle.inspect",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/whistle-plugins/whistle.inspectgit"
+  },
+  "engines": {
+    "node": ">=0.12"
+  }
+}

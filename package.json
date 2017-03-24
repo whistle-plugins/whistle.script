@@ -20,9 +20,9 @@
     "url": "https://github.com/whistle-plugins/whistle.inspectgit"
   },
   "scripts": {
-    "dev": "webpack -w",
-    "lint": "eslint ./lib index.js webpack.config.js",
-    "lintfix": "eslint --fix ./lib index.js webpack.config.js"
+    "dev": "webpack --config ./src/webpack.config.js -w",
+    "lint": "eslint ./lib index.js ./src/webpack.config.js",
+    "lintfix": "eslint --fix ./lib index.js ./src/webpack.config.js"
   },
   "devDependencies": {
     "babel-core": "^6.7.6",

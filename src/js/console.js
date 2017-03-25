@@ -33,11 +33,11 @@ module.exports = React.createClass({
   },
   componentDidMount: function() {
     var self = this;
-    var state = self.state;
     (function loadLogs() {
-      var log = state.list[state.list.length - 1];
-      dataCenter.getLogs({ id: log && log.id }, function(list) {
+      dataCenter.getLogs({ id: self.lastId }, function(list) {
         self.addLogs(list);
+        var log = self.state.list[self.state.list.length - 1];
+        self.lastId = log && log.id;
         setTimeout(loadLogs, 1000);
       });
     })();

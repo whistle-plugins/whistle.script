@@ -45746,15 +45746,18 @@
 	    if (!list || !list.length) {
 	      return;
 	    }
-	    list = this.state.list.concat(list);
-	    var overCount = list.length - MAX_COUNT;
-	    if (overCount > 0) {
-	      list = list.slice(overCount);
-	    }
 	    var con = ReactDOM.findDOMNode(this.refs.console);
 	    var height = con.offsetHeight;
 	    var scrollTop = con.scrollTop;
 	    var atBottom = con.scrollHeight < height + scrollTop + 10;
+	    list = this.state.list.concat(list);
+	    var overCount = list.length - MAX_COUNT;
+	    if (overCount > 0) {
+	      if (!atBottom) {
+	        return;
+	      }
+	      list = list.slice(overCount);
+	    }
 	    this.setState({ list: list }, function () {
 	      if (atBottom) {
 	        con.scrollTop = con.scrollHeight;
@@ -45764,6 +45767,9 @@
 	  componentDidMount: function () {
 	    var self = this;
 	    (function loadLogs() {
+	      if (self.state.list.length > MAX_COUNT) {
+	        return setTimeout(loadLogs, 1000);
+	      }
 	      dataCenter.getLogs({ id: self.lastId }, function (list) {
 	        self.addLogs(list);
 	        var log = self.state.list[self.state.list.length - 1];
@@ -45818,7 +45824,7 @@
 	            var hide = log.hide ? ' hide' : '';
 	            return React.createElement(
 	              'li',
-	              { className: 'w-' + log.level + hide },
+	              { key: log.id, className: 'w-' + log.level + hide },
 	              React.createElement(
 	                'pre',
 	                null,

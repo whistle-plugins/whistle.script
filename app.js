@@ -13,4 +13,4 @@ setInterval(function() {
   console.info(new Error('===' + index++), { abc: 123 });
   console.debug(new Error('===' + index++), { abc: 123 });
   console.trace(new Error('===' + index++), { abc: 123 });
-}, 6000);
+}, 1000);

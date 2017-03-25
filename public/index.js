@@ -52,6 +52,7 @@
 	var React = __webpack_require__(19);
 	var ReactDOM = __webpack_require__(46);
 	var List = __webpack_require__(184);
+	var Console = __webpack_require__(252);
 	var ListModal = __webpack_require__(243);
 	var MenuItem = __webpack_require__(244);
 	var EditorSettings = __webpack_require__(247);
@@ -163,9 +164,6 @@
 		},
 		showEditDialog: function () {
 			var activeItem = this.state.modal.getActive();
-			if (activeItem) {
-				this._showTplDialog($(ReactDOM.findDOMNode(this.refs.editTpl)), activeItem);
-			}
 		},
 		edit: function (e) {
 			var self = this;
@@ -237,22 +235,7 @@
 
 			return true;
 		},
-		_showTplDialog: function (dialog, data) {
-			var typeBox = dialog.find('.w-template-type');
-			var boxes = typeBox.find('input:checked');
-			var nameInput = dialog.find('.w-tpl-name');
-			if (data) {
-				typeBox.find('input[data-type=' + data.type + ']').prop('checked', true);
-				dialog.find('.w-tpl-name').val(data.name);
-			} else if (!boxes.length) {
-				typeBox.find('input:first').prop('checked', true);
-			}
-			dialog.modal('show');
-			setTimeout(function () {
-				nameInput.select().focus();
-			}, 300);
-		},
-		showTplSettingsDialog: function () {
+		showScriptSettings: function () {
 			$(ReactDOM.findDOMNode(this.refs.tplSettingsDialog)).modal('show');
 		},
 		remove: function () {
@@ -277,9 +260,6 @@
 				self.setState({});
 			});
 		},
-		showCreateTplDialog: function () {
-			this._showTplDialog($(ReactDOM.findDOMNode(this.refs.createTpl)));
-		},
 		onThemeChange: function (e) {
 			var theme = e.target.value;
 			dataCenter.setTheme({ theme: theme });
@@ -301,12 +281,17 @@
 				showLineNumbers: showLineNumbers
 			});
 		},
+		changeTab: function (e) {
+			var name = e.target.getAttribute('data-tab-name');
+			this.setState({ activeTabName: name });
+		},
 		render: function () {
 			var state = this.state;
 			var theme = state.theme || 'cobalt';
 			var fontSize = state.fontSize || '14px';
 			var showLineNumbers = state.showLineNumbers || false;
 			var activeItem = this.state.modal.getActive();
+			var isConsole = state.activeTabName === 'console';
 
 			return React.createElement(
 				'div',
@@ -316,45 +301,51 @@
 					{ className: 'w-menu' },
 					React.createElement(
 						'a',
-						{ className: 'w-script-menu active', href: 'javascript:;' },
+						{ onClick: this.changeTab, className: 'w-script-menu' + (isConsole ? '' : ' active'), 'data-tab-name': 'script', href: 'javascript:;' },
 						React.createElement('span', { className: 'glyphicon glyphicon-file' }),
 						'Script'
 					),
 					React.createElement(
 						'a',
-						{ className: 'w-console-menu', href: '/console.html', target: '_blank' },
+						{ onClick: this.changeTab, className: 'w-console-menu' + (isConsole ? ' active' : ''), 'data-tab-name': 'console', href: 'javascript:;' },
 						React.createElement('span', { className: 'glyphicon glyphicon-console' }),
 						'Console'
 					),
 					React.createElement(
 						'a',
-						{ className: 'w-create-menu', href: 'javascript:;', onClick: this.showCreateTplDialog },
+						{ onClick: this.create, style: { display: isConsole ? 'none' : '' }, className: 'w-create-menu', href: 'javascript:;' },
 						React.createElement('span', { className: 'glyphicon glyphicon-plus' }),
 						'Create'
 					),
 					React.createElement(
 						'a',
-						{ className: 'w-edit-menu', href: 'javascript:;', onClick: this.showEditDialog },
+						{ onClick: this.rename, style: { display: isConsole ? 'none' : '' }, className: 'w-edit-menu', href: 'javascript:;' },
 						React.createElement('span', { className: 'glyphicon glyphicon-edit' }),
 						'Rename'
 					),
 					React.createElement(
 						'a',
-						{ className: 'w-remove-menu', href: 'javascript:;', onClick: this.remove },
+						{ onClick: this.remove, style: { display: isConsole ? 'none' : '' }, className: 'w-remove-menu', href: 'javascript:;' },
 						React.createElement('span', { className: 'glyphicon glyphicon-trash' }),
 						'Delete'
 					),
 					React.createElement(
 						'a',
-						{ className: 'w-save-menu', href: 'javascript:;', onClick: this.save },
+						{ onClick: this.save, style: { display: isConsole ? 'none' : '' }, className: 'w-save-menu', href: 'javascript:;' },
 						React.createElement('span', { className: 'glyphicon glyphicon-save-file' }),
 						'Save'
 					),
 					React.createElement(
 						'a',
-						{ className: 'w-settings-menu', href: 'javascript:;', onClick: this.showTplSettingsDialog },
+						{ onClick: this.showScriptSettings, style: { display: isConsole ? 'none' : '' }, className: 'w-settings-menu', href: 'javascript:;' },
 						React.createElement('span', { className: 'glyphicon glyphicon-cog' }),
 						'Settings'
+					),
+					React.createElement(
+						'a',
+						{ onClick: this.clearConsole, style: { display: isConsole ? '' : 'none' }, className: 'w-clear-console-menu', href: 'javascript:;' },
+						React.createElement('span', { className: 'glyphicon glyphicon-remove' }),
+						'Clear'
 					),
 					React.createElement(
 						'a',
@@ -363,7 +354,8 @@
 						'Help'
 					)
 				),
-				React.createElement(List, { onActive: this.active, theme: theme, fontSize: fontSize, lineNumbers: showLineNumbers, onSelect: this.setValue, modal: this.state.modal, className: 'w-data-list' }),
+				React.createElement(List, { hide: isConsole, onActive: this.active, theme: theme, fontSize: fontSize, lineNumbers: showLineNumbers, onSelect: this.setValue, modal: this.state.modal, className: 'w-data-list' }),
+				React.createElement(Console, { hide: !isConsole }),
 				React.createElement(
 					'div',
 					{ ref: 'createTpl', className: 'modal fade w-create-tpl' },
@@ -46427,6 +46419,124 @@
 	}
 
 	module.exports = create;
+
+/***/ },
+/* 252 */
+/***/ function(module, exports, __webpack_require__) {
+
+	__webpack_require__(253);
+	var React = __webpack_require__(19);
+	var util = __webpack_require__(195);
+	var FilterInput = __webpack_require__(240);
+	var LEVELS = ['fatal', 'error', 'warn', 'info', 'debug', 'trace'];
+
+	module.exports = React.createClass({
+	  displayName: 'exports',
+
+	  getInitialState: function () {
+	    return { list: [] };
+	  },
+	  componentDidMount: function () {
+	    this.setState({
+	      list: [JSON.stringify({
+	        test: 123,
+	        abc: 321,
+	        efg: 123456
+	      }, null, '  '), '-----------------------sssssss', '===========fffffffffffffffffffff', '0000000000000000000000000000000']
+	    });
+	  },
+	  shouldComponentUpdate: function (nextProps) {
+	    var hide = util.getBoolean(this.props.hide);
+	    return hide != util.getBoolean(nextProps.hide) || !hide;
+	  },
+	  onFilterChange: function (val) {
+	    console.log(val);
+	  },
+	  render: function () {
+	    var hide = this.props.hide ? ' hide' : '';
+	    var list = this.state.list;
+
+	    return React.createElement(
+	      'div',
+	      { className: 'fill orient-vertical-box' + hide },
+	      React.createElement(
+	        'div',
+	        { className: 'fill w-console-con' },
+	        React.createElement(
+	          'ul',
+	          { className: 'w-log-list' },
+	          list.map(function (log) {
+	            if (log === undefined) {
+	              return;
+	            }
+	            if (!log || typeof log === 'string') {
+	              return React.createElement(
+	                'li',
+	                { className: 'w-info' },
+	                React.createElement(
+	                  'pre',
+	                  null,
+	                  log
+	                )
+	              );
+	            }
+	            var level = LEVELS.indexOf(log.level) === -1 ? 'w-info' : 'w-' + log.level;
+	            return React.createElement(
+	              'li',
+	              { className: level },
+	              React.createElement(
+	                'pre',
+	                null,
+	                log.msg
+	              )
+	            );
+	          })
+	        )
+	      ),
+	      React.createElement(FilterInput, { onChange: this.onFilterChange })
+	    );
+	  }
+	});
+
+/***/ },
+/* 253 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(254);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(10)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!../../node_modules/.0.23.1@css-loader/index.js!./console.css", function() {
+				var newContent = require("!!../../node_modules/.0.23.1@css-loader/index.js!./console.css");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 254 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(4)();
+	// imports
+
+
+	// module
+	exports.push([module.id, ".w-console-con { background: #000; color: #fff; }\r\n.w-console-con .w-fatal { color: magenta; }\r\n.w-console-con .w-error { color: red; }\r\n.w-console-con .w-warn { color: yellow; }\r\n.w-console-con .w-info { color: green; }\r\n.w-console-con .w-debug { color: cyan; }\r\n.w-console-con .w-trace { color: grey; }\r\n.w-console-con .w-log-list { padding: 0; margin: 0; list-style: none; }\r\n.w-console-con .w-log-list li { list-style: none; margin: 0; padding: 3px 10px; }\r\n.w-console-con .w-log-list li pre { padding: 0; margin: 0; color: inherit; font-size: inherit;\r\n  background: transparent; border: none; }", ""]);
+
+	// exports
+
 
 /***/ }
 /******/ ]);

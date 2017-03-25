@@ -6,6 +6,7 @@ require('bootstrap/dist/js/bootstrap.js');
 var React = require('react');
 var ReactDOM = require('react-dom');
 var List = require('./list');
+var Console = require('./console');
 var ListModal = require('./list-modal');
 var MenuItem = require('./menu-item');
 var EditorSettings = require('./editor-settings');
@@ -117,9 +118,6 @@ var Index = React.createClass({
 	},
 	showEditDialog: function() {
 		var activeItem = this.state.modal.getActive();
-		if (activeItem) {
-			this._showTplDialog($(ReactDOM.findDOMNode(this.refs.editTpl)), activeItem);
-		}
 	},
 	edit: function(e) {
 		var self = this;
@@ -191,22 +189,7 @@ var Index = React.createClass({
 
 		return true;
 	},
-	_showTplDialog: function(dialog, data) {
-		var typeBox = dialog.find('.w-template-type');
-		var boxes = typeBox.find('input:checked');
-		var nameInput = dialog.find('.w-tpl-name');
-		if (data) {
-			typeBox.find('input[data-type=' + data.type + ']').prop('checked', true);
-			dialog.find('.w-tpl-name').val(data.name);
-		} else if (!boxes.length) {
-			typeBox.find('input:first').prop('checked', true);
-		}
-		dialog.modal('show');
-		setTimeout(function() {
-			nameInput.select().focus();
-		}, 300);
-	},
-	showTplSettingsDialog: function() {
+	showScriptSettings: function() {
 		$(ReactDOM.findDOMNode(this.refs.tplSettingsDialog)).modal('show');
 	},
 	remove: function() {
@@ -231,9 +214,6 @@ var Index = React.createClass({
 			self.setState({});
 		});
 	},
-	showCreateTplDialog: function() {
-		this._showTplDialog($(ReactDOM.findDOMNode(this.refs.createTpl)));
-	},
 	onThemeChange: function(e) {
 		var theme = e.target.value;
 		dataCenter.setTheme({theme: theme});
@@ -255,25 +235,32 @@ var Index = React.createClass({
 			showLineNumbers: showLineNumbers
 		});
 	},
+	changeTab: function(e) {
+		var name = e.target.getAttribute('data-tab-name');
+		this.setState({ activeTabName: name });
+	},
 	render: function() {
 		var state = this.state;
 		var theme = state.theme || 'cobalt';
 		var fontSize = state.fontSize || '14px';
 		var showLineNumbers = state.showLineNumbers || false;
 		var activeItem = this.state.modal.getActive();
+		var isConsole = state.activeTabName === 'console';
 
 		return (<div className="container orient-vertical-box">
 					<div className="w-menu">
-						<a className="w-script-menu active" href="javascript:;"><span className="glyphicon glyphicon-file"></span>Script</a>
-						<a className="w-console-menu" href="/console.html" target="_blank"><span className="glyphicon glyphicon-console"></span>Console</a>
-						<a className="w-create-menu" href="javascript:;" onClick={this.showCreateTplDialog}><span className="glyphicon glyphicon-plus"></span>Create</a>
-						<a className="w-edit-menu" href="javascript:;" onClick={this.showEditDialog}><span className="glyphicon glyphicon-edit"></span>Rename</a>
-						<a className="w-remove-menu" href="javascript:;" onClick={this.remove}><span className="glyphicon glyphicon-trash"></span>Delete</a>
-						<a className="w-save-menu" href="javascript:;" onClick={this.save}><span className="glyphicon glyphicon-save-file"></span>Save</a>
-						<a className="w-settings-menu" href="javascript:;" onClick={this.showTplSettingsDialog}><span className="glyphicon glyphicon-cog"></span>Settings</a>
+						<a onClick={this.changeTab} className={ 'w-script-menu' + (isConsole ? '' : ' active') } data-tab-name="script" href="javascript:;"><span className="glyphicon glyphicon-file"></span>Script</a>
+						<a onClick={this.changeTab} className={ 'w-console-menu' + (isConsole ?' active' : '') } data-tab-name="console" href="javascript:;"><span className="glyphicon glyphicon-console"></span>Console</a>
+						<a onClick={this.create} style={{display: isConsole ? 'none' : ''}} className="w-create-menu" href="javascript:;"><span className="glyphicon glyphicon-plus"></span>Create</a>
+						<a onClick={this.rename} style={{display: isConsole ? 'none' : ''}} className="w-edit-menu" href="javascript:;"><span className="glyphicon glyphicon-edit"></span>Rename</a>
+						<a onClick={this.remove} style={{display: isConsole ? 'none' : ''}} className="w-remove-menu" href="javascript:;"><span className="glyphicon glyphicon-trash"></span>Delete</a>
+						<a onClick={this.save} style={{display: isConsole ? 'none' : ''}} className="w-save-menu" href="javascript:;"><span className="glyphicon glyphicon-save-file"></span>Save</a>
+						<a onClick={this.showScriptSettings} style={{display: isConsole ? 'none' : ''}} className="w-settings-menu" href="javascript:;"><span className="glyphicon glyphicon-cog"></span>Settings</a>
+						<a onClick={this.clearConsole} style={{display: isConsole ? '' : 'none'}} className="w-clear-console-menu" href="javascript:;"><span className="glyphicon glyphicon-remove"></span>Clear</a>
 						<a className="w-help-menu" href="https://github.com/whistle-plugins/whistle.inspect" target="_blank"><span className="glyphicon glyphicon-question-sign"></span>Help</a>
           </div>
-					<List onActive={this.active} theme={theme} fontSize={fontSize} lineNumbers={showLineNumbers} onSelect={this.setValue}  modal={this.state.modal} className="w-data-list" />
+					<List hide={isConsole} onActive={this.active} theme={theme} fontSize={fontSize} lineNumbers={showLineNumbers} onSelect={this.setValue}  modal={this.state.modal} className="w-data-list" />
+					<Console hide={!isConsole} />
 					<div ref="createTpl" className="modal fade w-create-tpl">
 						<div className="modal-dialog">
 					  		<div className="modal-content">

@@ -3,31 +3,70 @@ var React = require('react');
 var util = require('./util');
 var FilterInput = require('./filter-input');
 var LEVELS = ['fatal', 'error', 'warn', 'info', 'debug', 'trace'];
+var MAX_COUNT = 360;
 
 module.exports = React.createClass({
   getInitialState: function() {
     return { list: [] };
   },
-  componentDidMount: function() {
-    this.setState({
-      list: [
-        JSON.stringify({
-          test: 123,
-          abc: 321,
-          efg: 123456
-        }, null, '  '),
-        '-----------------------sssssss',
-        '===========fffffffffffffffffffff',
-        '0000000000000000000000000000000'
-      ]
+  addLogs: function(list) {
+    if (!list || !Array.isArray(list)) {
+      return;
+    }
+    list = list.filter(function(log) {
+      if (!log || typeof log !== 'object') {
+        return;
+      }
+      if (LEVELS.indexOf(log.level) === -1) {
+        log.level = 'info';
+      }
+      if (typeof log.msg === 'object') {
+        log.msg = JSON.stringify(log.msg, null, '  ');
+      } else {
+        log.msg = String(log.msg);
+      }
+      return log;
     });
+    if (!list.length) {
+      return;
+    }
+    list = this.state.list.concat(list);
+    var overCount = list.length - MAX_COUNT;
+    if (overCount > 0) {
+      list = list.slice(overCount);
+    }
+    this.setState({ list: list });
+  },
+  componentDidMount: function() {
+    this.addLogs([{msg: 123}]);
   },
   shouldComponentUpdate: function(nextProps) {
 		var hide = util.getBoolean(this.props.hide);
 		return hide != util.getBoolean(nextProps.hide) || !hide;
 	},
+  autoRefresh: function() {
+    
+  },
+  clear: function() {
+    this.setState({ list: [] });
+  },
   onFilterChange: function(val) {
-    console.log(val);
+    val = val.trim();
+    var list = this.state.list;
+    if (!list.length) {
+      return;
+    }
+    // 支持正则及多个关键字
+    if (val) {
+      list.forEach(function(log) {
+        log.hide = log.msg.indexOf(val) === -1;
+      });
+    } else {
+      list.forEach(function(log) {
+        log.hide = false;
+      });
+    }
+    this.setState({ list: list });
   },
   render: function() {
     var hide =  this.props.hide ? ' hide' : '';
@@ -38,14 +77,8 @@ module.exports = React.createClass({
         <div className="fill w-console-con">
           <ul className="w-log-list">
             {list.map(function(log) {
-              if (log === undefined) {
-                return;
-              }
-              if (!log || typeof log === 'string') {
-                return <li className="w-info"><pre>{log}</pre></li>;
-              }
-              var level = LEVELS.indexOf(log.level) === -1 ? 'w-info' : 'w-' + log.level;
-              return <li className={level}><pre>{log.msg}</pre></li>;
+              var hide = log.hide ? ' hide' : '';
+              return <li className={'w-' + log.level + hide}><pre>{log.msg}</pre></li>;
             })}
           </ul>
         </div>

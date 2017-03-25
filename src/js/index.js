@@ -192,6 +192,18 @@ var Index = React.createClass({
 	showScriptSettings: function() {
 		$(ReactDOM.findDOMNode(this.refs.tplSettingsDialog)).modal('show');
 	},
+	clearConsole: function() {
+		var console = this.refs.console;
+		if (console) {
+			console.clear();
+		}
+	},
+	autoRefreshConsole: function() {
+		var console = this.refs.console;
+		if (console) {
+			console.autoRefresh();
+		}
+	},
 	remove: function() {
 		var self = this;
 		var modal = self.state.modal;
@@ -236,7 +248,7 @@ var Index = React.createClass({
 		});
 	},
 	changeTab: function(e) {
-		var name = e.target.getAttribute('data-tab-name');
+		var name = $(e.target).closest('a').attr('data-tab-name');
 		this.setState({ activeTabName: name });
 	},
 	render: function() {
@@ -256,11 +268,12 @@ var Index = React.createClass({
 						<a onClick={this.remove} style={{display: isConsole ? 'none' : ''}} className="w-remove-menu" href="javascript:;"><span className="glyphicon glyphicon-trash"></span>Delete</a>
 						<a onClick={this.save} style={{display: isConsole ? 'none' : ''}} className="w-save-menu" href="javascript:;"><span className="glyphicon glyphicon-save-file"></span>Save</a>
 						<a onClick={this.showScriptSettings} style={{display: isConsole ? 'none' : ''}} className="w-settings-menu" href="javascript:;"><span className="glyphicon glyphicon-cog"></span>Settings</a>
-						<a onClick={this.clearConsole} style={{display: isConsole ? '' : 'none'}} className="w-clear-console-menu" href="javascript:;"><span className="glyphicon glyphicon-remove"></span>Clear</a>
+						<a onClick={this.autoRefreshConsole} style={{display: isConsole ? '' : 'none'}} className="w-clear-console-menu" href="javascript:;"><span className="glyphicon glyphicon-play"></span>AutoRefresh</a>
+						<a onClick={this.clearConsole} style={{display: isConsole ? '' : 'none'}} className="w-auto-refresh-menu" href="javascript:;"><span className="glyphicon glyphicon-remove"></span>Clear</a>
 						<a className="w-help-menu" href="https://github.com/whistle-plugins/whistle.inspect" target="_blank"><span className="glyphicon glyphicon-question-sign"></span>Help</a>
           </div>
 					<List hide={isConsole} onActive={this.active} theme={theme} fontSize={fontSize} lineNumbers={showLineNumbers} onSelect={this.setValue}  modal={this.state.modal} className="w-data-list" />
-					<Console hide={!isConsole} />
+					<Console ref="console" hide={!isConsole} />
 					<div ref="createTpl" className="modal fade w-create-tpl">
 						<div className="modal-dialog">
 					  		<div className="modal-content">

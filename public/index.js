@@ -238,6 +238,18 @@
 		showScriptSettings: function () {
 			$(ReactDOM.findDOMNode(this.refs.tplSettingsDialog)).modal('show');
 		},
+		clearConsole: function () {
+			var console = this.refs.console;
+			if (console) {
+				console.clear();
+			}
+		},
+		autoRefreshConsole: function () {
+			var console = this.refs.console;
+			if (console) {
+				console.autoRefresh();
+			}
+		},
 		remove: function () {
 			var self = this;
 			var modal = self.state.modal;
@@ -282,7 +294,7 @@
 			});
 		},
 		changeTab: function (e) {
-			var name = e.target.getAttribute('data-tab-name');
+			var name = $(e.target).closest('a').attr('data-tab-name');
 			this.setState({ activeTabName: name });
 		},
 		render: function () {
@@ -343,7 +355,13 @@
 					),
 					React.createElement(
 						'a',
-						{ onClick: this.clearConsole, style: { display: isConsole ? '' : 'none' }, className: 'w-clear-console-menu', href: 'javascript:;' },
+						{ onClick: this.autoRefreshConsole, style: { display: isConsole ? '' : 'none' }, className: 'w-clear-console-menu', href: 'javascript:;' },
+						React.createElement('span', { className: 'glyphicon glyphicon-play' }),
+						'AutoRefresh'
+					),
+					React.createElement(
+						'a',
+						{ onClick: this.clearConsole, style: { display: isConsole ? '' : 'none' }, className: 'w-auto-refresh-menu', href: 'javascript:;' },
 						React.createElement('span', { className: 'glyphicon glyphicon-remove' }),
 						'Clear'
 					),
@@ -355,7 +373,7 @@
 					)
 				),
 				React.createElement(List, { hide: isConsole, onActive: this.active, theme: theme, fontSize: fontSize, lineNumbers: showLineNumbers, onSelect: this.setValue, modal: this.state.modal, className: 'w-data-list' }),
-				React.createElement(Console, { hide: !isConsole }),
+				React.createElement(Console, { ref: 'console', hide: !isConsole }),
 				React.createElement(
 					'div',
 					{ ref: 'createTpl', className: 'modal fade w-create-tpl' },
@@ -46429,6 +46447,7 @@
 	var util = __webpack_require__(195);
 	var FilterInput = __webpack_require__(240);
 	var LEVELS = ['fatal', 'error', 'warn', 'info', 'debug', 'trace'];
+	var MAX_COUNT = 360;
 
 	module.exports = React.createClass({
 	  displayName: 'exports',
@@ -46436,21 +46455,62 @@
 	  getInitialState: function () {
 	    return { list: [] };
 	  },
-	  componentDidMount: function () {
-	    this.setState({
-	      list: [JSON.stringify({
-	        test: 123,
-	        abc: 321,
-	        efg: 123456
-	      }, null, '  '), '-----------------------sssssss', '===========fffffffffffffffffffff', '0000000000000000000000000000000']
+	  addLogs: function (list) {
+	    if (!list || !Array.isArray(list)) {
+	      return;
+	    }
+	    list = list.filter(function (log) {
+	      if (!log || typeof log !== 'object') {
+	        return;
+	      }
+	      if (LEVELS.indexOf(log.level) === -1) {
+	        log.level = 'info';
+	      }
+	      if (typeof log.msg === 'object') {
+	        log.msg = JSON.stringify(log.msg, null, '  ');
+	      } else {
+	        log.msg = String(log.msg);
+	      }
+	      return log;
 	    });
+	    if (!list.length) {
+	      return;
+	    }
+	    list = this.state.list.concat(list);
+	    var overCount = list.length - MAX_COUNT;
+	    if (overCount > 0) {
+	      list = list.slice(overCount);
+	    }
+	    this.setState({ list: list });
+	  },
+	  componentDidMount: function () {
+	    this.addLogs([{ msg: 123 }]);
 	  },
 	  shouldComponentUpdate: function (nextProps) {
 	    var hide = util.getBoolean(this.props.hide);
 	    return hide != util.getBoolean(nextProps.hide) || !hide;
 	  },
+	  autoRefresh: function () {},
+	  clear: function () {
+	    this.setState({ list: [] });
+	  },
 	  onFilterChange: function (val) {
-	    console.log(val);
+	    val = val.trim();
+	    var list = this.state.list;
+	    if (!list.length) {
+	      return;
+	    }
+	    // 支持正则及多个关键字
+	    if (val) {
+	      list.forEach(function (log) {
+	        log.hide = log.msg.indexOf(val) === -1;
+	      });
+	    } else {
+	      list.forEach(function (log) {
+	        log.hide = false;
+	      });
+	    }
+	    this.setState({ list: list });
 	  },
 	  render: function () {
 	    var hide = this.props.hide ? ' hide' : '';
@@ -46466,24 +46526,10 @@
 	          'ul',
 	          { className: 'w-log-list' },
 	          list.map(function (log) {
-	            if (log === undefined) {
-	              return;
-	            }
-	            if (!log || typeof log === 'string') {
-	              return React.createElement(
-	                'li',
-	                { className: 'w-info' },
-	                React.createElement(
-	                  'pre',
-	                  null,
-	                  log
-	                )
-	              );
-	            }
-	            var level = LEVELS.indexOf(log.level) === -1 ? 'w-info' : 'w-' + log.level;
+	            var hide = log.hide ? ' hide' : '';
 	            return React.createElement(
 	              'li',
-	              { className: level },
+	              { className: 'w-' + log.level + hide },
 	              React.createElement(
 	                'pre',
 	                null,
@@ -46533,7 +46579,7 @@
 
 
 	// module
-	exports.push([module.id, ".w-console-con { background: #000; color: #fff; }\r\n.w-console-con .w-fatal { color: magenta; }\r\n.w-console-con .w-error { color: red; }\r\n.w-console-con .w-warn { color: yellow; }\r\n.w-console-con .w-info { color: green; }\r\n.w-console-con .w-debug { color: cyan; }\r\n.w-console-con .w-trace { color: grey; }\r\n.w-console-con .w-log-list { padding: 0; margin: 0; list-style: none; }\r\n.w-console-con .w-log-list li { list-style: none; margin: 0; padding: 3px 10px; }\r\n.w-console-con .w-log-list li pre { padding: 0; margin: 0; color: inherit; font-size: inherit;\r\n  background: transparent; border: none; }", ""]);
+	exports.push([module.id, ".w-console-con { background: #002240; color: #fff; overflow-y: auto; }\r\n.w-console-con .w-fatal { color: magenta; }\r\n.w-console-con .w-error { color: red; }\r\n.w-console-con .w-warn { color: yellow; }\r\n.w-console-con .w-info { color: green; }\r\n.w-console-con .w-debug { color: cyan; }\r\n.w-console-con .w-trace { color: grey; }\r\n.w-console-con .w-log-list { padding: 0; margin: 0; list-style: none; }\r\n.w-console-con .w-log-list li { list-style: none; margin: 0; padding: 3px 10px; }\r\n.w-console-con .w-log-list li pre { padding: 0; margin: 0; color: inherit; font-size: inherit;\r\n  background: transparent; border: none; white-space: pre-wrap; }", ""]);
 
 	// exports
 

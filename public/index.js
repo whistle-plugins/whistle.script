@@ -52,12 +52,12 @@
 	var React = __webpack_require__(19);
 	var ReactDOM = __webpack_require__(46);
 	var List = __webpack_require__(184);
-	var Console = __webpack_require__(252);
-	var ListModal = __webpack_require__(243);
-	var MenuItem = __webpack_require__(244);
-	var EditorSettings = __webpack_require__(247);
+	var Console = __webpack_require__(243);
+	var ListModal = __webpack_require__(246);
+	var MenuItem = __webpack_require__(247);
+	var EditorSettings = __webpack_require__(250);
 	var util = __webpack_require__(195);
-	var dataCenter = __webpack_require__(250);
+	var dataCenter = __webpack_require__(253);
 
 	var Index = React.createClass({
 		displayName: 'Index',
@@ -45726,6 +45726,145 @@
 /* 243 */
 /***/ function(module, exports, __webpack_require__) {
 
+	__webpack_require__(244);
+	var React = __webpack_require__(19);
+	var util = __webpack_require__(195);
+	var FilterInput = __webpack_require__(240);
+	var dataCenter = __webpack_require__(253);
+
+	var LEVELS = ['fatal', 'error', 'warn', 'info', 'debug', 'trace'];
+	var MAX_COUNT = 360;
+
+	module.exports = React.createClass({
+	  displayName: 'exports',
+
+	  getInitialState: function () {
+	    return { list: [] };
+	  },
+	  addLogs: function (list) {
+	    if (!list || !list.length) {
+	      return;
+	    }
+	    list = this.state.list.concat(list);
+	    var overCount = list.length - MAX_COUNT;
+	    if (overCount > 0) {
+	      list = list.slice(overCount);
+	    }
+	    this.setState({ list: list });
+	  },
+	  componentDidMount: function () {
+	    var self = this;
+	    var state = self.state;
+	    (function loadLogs() {
+	      var log = state.list[state.list.length - 1];
+	      dataCenter.getLogs({ id: log && log.id }, function (list) {
+	        self.addLogs(list);
+	        setTimeout(loadLogs, 1000);
+	      });
+	    })();
+	  },
+	  shouldComponentUpdate: function (nextProps) {
+	    var hide = util.getBoolean(this.props.hide);
+	    return hide != util.getBoolean(nextProps.hide) || !hide;
+	  },
+	  autoRefresh: function () {},
+	  clear: function () {
+	    this.setState({ list: [] });
+	  },
+	  onFilterChange: function (val) {
+	    val = val.trim();
+	    var list = this.state.list;
+	    if (!list.length) {
+	      return;
+	    }
+	    // 支持正则及多个关键字
+	    if (val) {
+	      list.forEach(function (log) {
+	        log.hide = log.msg.indexOf(val) === -1;
+	      });
+	    } else {
+	      list.forEach(function (log) {
+	        log.hide = false;
+	      });
+	    }
+	    this.setState({ list: list });
+	  },
+	  render: function () {
+	    var hide = this.props.hide ? ' hide' : '';
+	    var list = this.state.list;
+
+	    return React.createElement(
+	      'div',
+	      { className: 'fill orient-vertical-box' + hide },
+	      React.createElement(
+	        'div',
+	        { className: 'fill w-console-con' },
+	        React.createElement(
+	          'ul',
+	          { className: 'w-log-list' },
+	          list.map(function (log) {
+	            var hide = log.hide ? ' hide' : '';
+	            return React.createElement(
+	              'li',
+	              { className: 'w-' + log.level + hide },
+	              React.createElement(
+	                'pre',
+	                null,
+	                log.msg
+	              )
+	            );
+	          })
+	        )
+	      ),
+	      React.createElement(FilterInput, { onChange: this.onFilterChange })
+	    );
+	  }
+	});
+
+/***/ },
+/* 244 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(245);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(10)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!../../node_modules/.0.23.1@css-loader/index.js!./console.css", function() {
+				var newContent = require("!!../../node_modules/.0.23.1@css-loader/index.js!./console.css");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 245 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(4)();
+	// imports
+
+
+	// module
+	exports.push([module.id, ".w-console-con { background: #002240; color: #fff; overflow-y: auto; }\r\n.w-console-con .w-fatal { color: magenta; }\r\n.w-console-con .w-error { color: red; }\r\n.w-console-con .w-warn { color: yellow; }\r\n.w-console-con .w-info { color: green; }\r\n.w-console-con .w-debug { color: cyan; }\r\n.w-console-con .w-trace { color: grey; }\r\n.w-console-con .w-log-list { padding: 0; margin: 0; list-style: none; }\r\n.w-console-con .w-log-list li { list-style: none; margin: 0; padding: 3px 10px; }\r\n.w-console-con .w-log-list li pre { padding: 0; margin: 0; color: inherit; font-size: inherit;\r\n  background: transparent; border: none; white-space: pre-wrap; }", ""]);
+
+	// exports
+
+
+/***/ },
+/* 246 */
+/***/ function(module, exports, __webpack_require__) {
+
 	var $ = __webpack_require__(17);
 	var util = __webpack_require__(195);
 
@@ -45983,11 +46122,11 @@
 	module.exports = ListModal;
 
 /***/ },
-/* 244 */
+/* 247 */
 /***/ function(module, exports, __webpack_require__) {
 
 	__webpack_require__(1);
-	__webpack_require__(245);
+	__webpack_require__(248);
 	var React = __webpack_require__(19);
 	var util = __webpack_require__(195);
 
@@ -46039,13 +46178,13 @@
 	module.exports = MenuItem;
 
 /***/ },
-/* 245 */
+/* 248 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(246);
+	var content = __webpack_require__(249);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(10)(content, {});
@@ -46065,7 +46204,7 @@
 	}
 
 /***/ },
-/* 246 */
+/* 249 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(4)();
@@ -46079,11 +46218,11 @@
 
 
 /***/ },
-/* 247 */
+/* 250 */
 /***/ function(module, exports, __webpack_require__) {
 
 	__webpack_require__(1);
-	__webpack_require__(248);
+	__webpack_require__(251);
 	var React = __webpack_require__(19);
 
 	var EditorSettings = React.createClass({
@@ -46306,13 +46445,13 @@
 	module.exports = EditorSettings;
 
 /***/ },
-/* 248 */
+/* 251 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(249);
+	var content = __webpack_require__(252);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(10)(content, {});
@@ -46332,7 +46471,7 @@
 	}
 
 /***/ },
-/* 249 */
+/* 252 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(4)();
@@ -46346,11 +46485,11 @@
 
 
 /***/ },
-/* 250 */
+/* 253 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var $ = __webpack_require__(17);
-	var createCgi = __webpack_require__(251);
+	var createCgi = __webpack_require__(254);
 	var TIMEOUT = 10000;
 	var DEFAULT_CONF = { timeout: TIMEOUT };
 	var POST_CONF = $.extend({ type: 'post' }, DEFAULT_CONF);
@@ -46358,7 +46497,7 @@
 
 	module.exports = $.extend(createCgi({
 	  init: '/cgi-bin/init',
-	  getActive: '/cgi-bin/get-active'
+	  getLogs: '/cgi-bin/log'
 	}, GET_CONF), createCgi({
 	  setActive: '/cgi-bin/set-active',
 	  remove: '/cgi-bin/remove',
@@ -46371,7 +46510,7 @@
 	}, POST_CONF));
 
 /***/ },
-/* 251 */
+/* 254 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var $ = __webpack_require__(17);
@@ -46437,135 +46576,6 @@
 	}
 
 	module.exports = create;
-
-/***/ },
-/* 252 */
-/***/ function(module, exports, __webpack_require__) {
-
-	__webpack_require__(253);
-	var React = __webpack_require__(19);
-	var util = __webpack_require__(195);
-	var FilterInput = __webpack_require__(240);
-	var LEVELS = ['fatal', 'error', 'warn', 'info', 'debug', 'trace'];
-	var MAX_COUNT = 360;
-
-	module.exports = React.createClass({
-	  displayName: 'exports',
-
-	  getInitialState: function () {
-	    return { list: [] };
-	  },
-	  addLogs: function (list) {
-	    if (!list || !list.length) {
-	      return;
-	    }
-	    list = this.state.list.concat(list);
-	    var overCount = list.length - MAX_COUNT;
-	    if (overCount > 0) {
-	      list = list.slice(overCount);
-	    }
-	    this.setState({ list: list });
-	  },
-	  componentDidMount: function () {
-	    this.addLogs([{ msg: 123 }]);
-	  },
-	  shouldComponentUpdate: function (nextProps) {
-	    var hide = util.getBoolean(this.props.hide);
-	    return hide != util.getBoolean(nextProps.hide) || !hide;
-	  },
-	  autoRefresh: function () {},
-	  clear: function () {
-	    this.setState({ list: [] });
-	  },
-	  onFilterChange: function (val) {
-	    val = val.trim();
-	    var list = this.state.list;
-	    if (!list.length) {
-	      return;
-	    }
-	    // 支持正则及多个关键字
-	    if (val) {
-	      list.forEach(function (log) {
-	        log.hide = log.msg.indexOf(val) === -1;
-	      });
-	    } else {
-	      list.forEach(function (log) {
-	        log.hide = false;
-	      });
-	    }
-	    this.setState({ list: list });
-	  },
-	  render: function () {
-	    var hide = this.props.hide ? ' hide' : '';
-	    var list = this.state.list;
-
-	    return React.createElement(
-	      'div',
-	      { className: 'fill orient-vertical-box' + hide },
-	      React.createElement(
-	        'div',
-	        { className: 'fill w-console-con' },
-	        React.createElement(
-	          'ul',
-	          { className: 'w-log-list' },
-	          list.map(function (log) {
-	            var hide = log.hide ? ' hide' : '';
-	            return React.createElement(
-	              'li',
-	              { className: 'w-' + log.level + hide },
-	              React.createElement(
-	                'pre',
-	                null,
-	                log.msg
-	              )
-	            );
-	          })
-	        )
-	      ),
-	      React.createElement(FilterInput, { onChange: this.onFilterChange })
-	    );
-	  }
-	});
-
-/***/ },
-/* 253 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// style-loader: Adds some css to the DOM by adding a <style> tag
-
-	// load the styles
-	var content = __webpack_require__(254);
-	if(typeof content === 'string') content = [[module.id, content, '']];
-	// add the styles to the DOM
-	var update = __webpack_require__(10)(content, {});
-	if(content.locals) module.exports = content.locals;
-	// Hot Module Replacement
-	if(false) {
-		// When the styles change, update the <style> tags
-		if(!content.locals) {
-			module.hot.accept("!!../../node_modules/.0.23.1@css-loader/index.js!./console.css", function() {
-				var newContent = require("!!../../node_modules/.0.23.1@css-loader/index.js!./console.css");
-				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-				update(newContent);
-			});
-		}
-		// When the module is disposed, remove the <style> tags
-		module.hot.dispose(function() { update(); });
-	}
-
-/***/ },
-/* 254 */
-/***/ function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(4)();
-	// imports
-
-
-	// module
-	exports.push([module.id, ".w-console-con { background: #002240; color: #fff; overflow-y: auto; }\r\n.w-console-con .w-fatal { color: magenta; }\r\n.w-console-con .w-error { color: red; }\r\n.w-console-con .w-warn { color: yellow; }\r\n.w-console-con .w-info { color: green; }\r\n.w-console-con .w-debug { color: cyan; }\r\n.w-console-con .w-trace { color: grey; }\r\n.w-console-con .w-log-list { padding: 0; margin: 0; list-style: none; }\r\n.w-console-con .w-log-list li { list-style: none; margin: 0; padding: 3px 10px; }\r\n.w-console-con .w-log-list li pre { padding: 0; margin: 0; color: inherit; font-size: inherit;\r\n  background: transparent; border: none; white-space: pre-wrap; }", ""]);
-
-	// exports
-
 
 /***/ }
 /******/ ]);

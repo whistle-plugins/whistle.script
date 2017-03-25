@@ -2,6 +2,8 @@ require('../css/console.css');
 var React = require('react');
 var util = require('./util');
 var FilterInput = require('./filter-input');
+var dataCenter = require('./data-center');
+
 var LEVELS = ['fatal', 'error', 'warn', 'info', 'debug', 'trace'];
 var MAX_COUNT = 360;
 
@@ -21,7 +23,15 @@ module.exports = React.createClass({
     this.setState({ list: list });
   },
   componentDidMount: function() {
-    this.addLogs([{msg: 123}]);
+    var self = this;
+    var state = self.state;
+    (function loadLogs() {
+      var log = state.list[state.list.length - 1];
+      dataCenter.getLogs({ id: log && log.id }, function(list) {
+        self.addLogs(list);
+        setTimeout(loadLogs, 1000);
+      });
+    })();
   },
   shouldComponentUpdate: function(nextProps) {
 		var hide = util.getBoolean(this.props.hide);

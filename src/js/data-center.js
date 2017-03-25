@@ -2,12 +2,12 @@ var $ = require('jquery');
 var createCgi = require('./cgi');
 var TIMEOUT = 10000;
 var DEFAULT_CONF = { timeout: TIMEOUT };
-var POST_CONF = $.extend({type: 'post'}, DEFAULT_CONF);
-var GET_CONF = $.extend({cache: false}, DEFAULT_CONF);
+var POST_CONF = $.extend({ type: 'post' }, DEFAULT_CONF);
+var GET_CONF = $.extend({ cache: false }, DEFAULT_CONF);
 
 module.exports = $.extend(createCgi({
   init: '/cgi-bin/init',
-  getActive: '/cgi-bin/get-active'
+  getLogs: '/cgi-bin/log',
 }, GET_CONF), createCgi({
   setActive: '/cgi-bin/set-active',
   remove: '/cgi-bin/remove',
@@ -16,5 +16,5 @@ module.exports = $.extend(createCgi({
   setTheme: '/cgi-bin/set-theme',
   setValue: '/cgi-bin/set-value',
   setFontSize: '/cgi-bin/set-font-size',
-  showLineNumbers: '/cgi-bin/show-line-numbers'
+  showLineNumbers: '/cgi-bin/show-line-numbers',
 }, POST_CONF));

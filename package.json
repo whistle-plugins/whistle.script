@@ -1,28 +1,28 @@
 {
-  "name": "whistle.inspect",
+  "name": "whistle.script",
   "description": "Programmable plugin for whistle",
   "version": "0.0.0",
   "author": "avenwu <avenwu@vip.qq.com>",
   "contributors": [],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/whistle-plugins/whistle.inspect/issues"
+    "url": "https://github.com/whistle-plugins/whistle.script/issues"
   },
-  "homepage": "https://github.com/whistle-plugins/whistle.inspect",
+  "homepage": "https://github.com/whistle-plugins/whistle.script",
   "keywords": [
     "whistle",
     "proxy",
     "ssi"
   ],
-  "registry": "https://github.com/whistle-plugins/whistle.inspect",
+  "registry": "https://github.com/whistle-plugins/whistle.script",
   "repository": {
     "type": "git",
-    "url": "https://github.com/whistle-plugins/whistle.inspectgit"
+    "url": "https://github.com/whistle-plugins/whistle.script.git"
   },
   "scripts": {
     "dev": "webpack --config ./src/webpack.config.js -w",
-    "lint": "eslint ./lib index.js ./src/webpack.config.js",
-    "lintfix": "eslint --fix ./lib index.js ./src/webpack.config.js"
+    "lint": "eslint ./lib index.js",
+    "lintfix": "eslint --fix ./lib index.js"
   },
   "devDependencies": {
     "babel-core": "^6.7.6",

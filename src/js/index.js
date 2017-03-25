@@ -264,13 +264,15 @@ var Index = React.createClass({
 
 		return (<div className="container orient-vertical-box">
 					<div className="w-menu">
+						<a className="w-script-menu active" href="javascript:;"><span className="glyphicon glyphicon-file"></span>Script</a>
+						<a className="w-console-menu" href="/console.html" target="_blank"><span className="glyphicon glyphicon-console"></span>Console</a>
 						<a className="w-create-menu" href="javascript:;" onClick={this.showCreateTplDialog}><span className="glyphicon glyphicon-plus"></span>Create</a>
 						<a className="w-edit-menu" href="javascript:;" onClick={this.showEditDialog}><span className="glyphicon glyphicon-edit"></span>Rename</a>
 						<a className="w-remove-menu" href="javascript:;" onClick={this.remove}><span className="glyphicon glyphicon-trash"></span>Delete</a>
 						<a className="w-save-menu" href="javascript:;" onClick={this.save}><span className="glyphicon glyphicon-save-file"></span>Save</a>
 						<a className="w-settings-menu" href="javascript:;" onClick={this.showTplSettingsDialog}><span className="glyphicon glyphicon-cog"></span>Settings</a>
-						<a className="w-help-menu" href="https://github.com/whistle-plugins/whistle.vase#whistlevase" target="_blank"><span className="glyphicon glyphicon-question-sign"></span>Help</a>
-					</div>
+						<a className="w-help-menu" href="https://github.com/whistle-plugins/whistle.inspect" target="_blank"><span className="glyphicon glyphicon-question-sign"></span>Help</a>
+          </div>
 					<List onActive={this.active} theme={theme} fontSize={fontSize} lineNumbers={showLineNumbers} onSelect={this.setValue}  modal={this.state.modal} className="w-data-list" />
 					<div ref="createTpl" className="modal fade w-create-tpl">
 						<div className="modal-dialog">

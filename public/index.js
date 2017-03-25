@@ -316,6 +316,18 @@
 					{ className: 'w-menu' },
 					React.createElement(
 						'a',
+						{ className: 'w-script-menu active', href: 'javascript:;' },
+						React.createElement('span', { className: 'glyphicon glyphicon-file' }),
+						'Script'
+					),
+					React.createElement(
+						'a',
+						{ className: 'w-console-menu', href: '/console.html', target: '_blank' },
+						React.createElement('span', { className: 'glyphicon glyphicon-console' }),
+						'Console'
+					),
+					React.createElement(
+						'a',
 						{ className: 'w-create-menu', href: 'javascript:;', onClick: this.showCreateTplDialog },
 						React.createElement('span', { className: 'glyphicon glyphicon-plus' }),
 						'Create'
@@ -346,7 +358,7 @@
 					),
 					React.createElement(
 						'a',
-						{ className: 'w-help-menu', href: 'https://github.com/whistle-plugins/whistle.vase#whistlevase', target: '_blank' },
+						{ className: 'w-help-menu', href: 'https://github.com/whistle-plugins/whistle.inspect', target: '_blank' },
 						React.createElement('span', { className: 'glyphicon glyphicon-question-sign' }),
 						'Help'
 					)
@@ -944,7 +956,7 @@
 
 
 	// module
-	exports.push([module.id, ".w-menu {height: 28px; border-top: 1px solid #fcfcfc; border-bottom: 1px solid #d3d3d3; padding: 0 5px;\n    background: -webkit-linear-gradient(#efeeee,#d3d4d5); background: linear-gradient(#efeeee,#d3d4d5); \n    padding-right: 5pc;  position: relative; z-index: 1001;}\n.w-menu a {text-decoration: none!important; color: #000; padding: 0 5px; line-height: 26px; height: 26px; margin-right: 5px; display: inline-block;}\n.w-menu .glyphicon {margin-right: 3px;}\n.w-menu .glyphicon-folder-open {margin-right: 6px;}\n.w-menu a:hover {color: #337ab7;}\n.w-menu .w-disabled {color: #888!important; cursor: default!important;}\n.w-menu .w-menu-enable {color: #337ab7;}\n.w-menu .w-menu-wrapper {display: inline-block; position: relative; height: 30px;}\n    ", ""]);
+	exports.push([module.id, ".w-menu {height: 28px; border-top: 1px solid #fcfcfc; padding: 0 5px;\n    background: #f2f2f2; padding-right: 5pc;  position: relative; z-index: 1001;}\n.w-menu a {text-decoration: none!important; color: #000; padding: 0 5px; line-height: 26px;\n    height: 26px; margin-right: 5px; display: inline-block;}\n.w-menu a.active { background: #ddd; }\n.w-menu .glyphicon {margin-right: 3px;}\n.w-menu .glyphicon-folder-open {margin-right: 6px;}\n.w-menu a:hover {color: #337ab7;}\n.w-menu .w-disabled {color: #888!important; cursor: default!important;}\n.w-menu .w-menu-enable {color: #337ab7;}\n.w-menu .w-menu-wrapper {display: inline-block; position: relative; height: 30px;}\n    ", ""]);
 
 	// exports
 

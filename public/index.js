@@ -46456,24 +46456,7 @@
 	    return { list: [] };
 	  },
 	  addLogs: function (list) {
-	    if (!list || !Array.isArray(list)) {
-	      return;
-	    }
-	    list = list.filter(function (log) {
-	      if (!log || typeof log !== 'object') {
-	        return;
-	      }
-	      if (LEVELS.indexOf(log.level) === -1) {
-	        log.level = 'info';
-	      }
-	      if (typeof log.msg === 'object') {
-	        log.msg = JSON.stringify(log.msg, null, '  ');
-	      } else {
-	        log.msg = String(log.msg);
-	      }
-	      return log;
-	    });
-	    if (!list.length) {
+	    if (!list || !list.length) {
 	      return;
 	    }
 	    list = this.state.list.concat(list);

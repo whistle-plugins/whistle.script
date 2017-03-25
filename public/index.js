@@ -45868,7 +45868,7 @@
 
 
 	// module
-	exports.push([module.id, ".w-console-con { background: #002240; color: #fff; overflow-y: auto; }\r\n.w-console-con .w-fatal { color: magenta; }\r\n.w-console-con .w-error { color: red; }\r\n.w-console-con .w-warn { color: yellow; }\r\n.w-console-con .w-info { color: green; }\r\n.w-console-con .w-debug { color: cyan; }\r\n.w-console-con .w-trace { color: grey; }\r\n.w-console-con .w-log-list { padding: 0; margin: 0; list-style: none; }\r\n.w-console-con .w-log-list li { list-style: none; margin: 0; padding: 3px 10px; }\r\n.w-console-con .w-log-list li pre { padding: 0; margin: 0; color: inherit; font-size: inherit;\r\n  background: transparent; border: none; white-space: pre-wrap; }", ""]);
+	exports.push([module.id, ".w-console-con { background: #002240; color: #fff; overflow-y: auto; }\n.w-console-con .w-fatal { color: magenta; }\n.w-console-con .w-error { color: red; }\n.w-console-con .w-warn { color: yellow; }\n.w-console-con .w-info { color: green; }\n.w-console-con .w-debug { color: cyan; }\n.w-console-con .w-trace { color: grey; }\n.w-console-con .w-log-list { padding: 0; margin: 0; list-style: none; }\n.w-console-con .w-log-list li { list-style: none; margin: 0; padding: 5px 20px; }\n.w-console-con .w-log-list li pre { padding: 0; margin: 0; color: inherit; font-size: inherit;\n  background: transparent; border: none; white-space: pre-wrap; }\n", ""]);
 
 	// exports
 

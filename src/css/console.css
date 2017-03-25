@@ -6,6 +6,6 @@
 .w-console-con .w-debug { color: cyan; }
 .w-console-con .w-trace { color: grey; }
 .w-console-con .w-log-list { padding: 0; margin: 0; list-style: none; }
-.w-console-con .w-log-list li { list-style: none; margin: 0; padding: 3px 10px; }
+.w-console-con .w-log-list li { list-style: none; margin: 0; padding: 5px 20px; }
 .w-console-con .w-log-list li pre { padding: 0; margin: 0; color: inherit; font-size: inherit;
   background: transparent; border: none; white-space: pre-wrap; }

@@ -45728,6 +45728,7 @@
 
 	__webpack_require__(244);
 	var React = __webpack_require__(19);
+	var ReactDOM = __webpack_require__(46);
 	var util = __webpack_require__(195);
 	var FilterInput = __webpack_require__(240);
 	var dataCenter = __webpack_require__(253);
@@ -45750,7 +45751,15 @@
 	    if (overCount > 0) {
 	      list = list.slice(overCount);
 	    }
-	    this.setState({ list: list });
+	    var con = ReactDOM.findDOMNode(this.refs.console);
+	    var height = con.offsetHeight;
+	    var scrollTop = con.scrollTop;
+	    var atBottom = con.scrollHeight < height + scrollTop + 10;
+	    this.setState({ list: list }, function () {
+	      if (atBottom) {
+	        con.scrollTop = con.scrollHeight;
+	      }
+	    });
 	  },
 	  componentDidMount: function () {
 	    var self = this;
@@ -45767,7 +45776,10 @@
 	    var hide = util.getBoolean(this.props.hide);
 	    return hide != util.getBoolean(nextProps.hide) || !hide;
 	  },
-	  autoRefresh: function () {},
+	  autoRefresh: function () {
+	    var con = ReactDOM.findDOMNode(this.refs.console);
+	    con.scrollTop = con.scrollHeight;
+	  },
 	  clear: function () {
 	    this.setState({ list: [] });
 	  },
@@ -45798,7 +45810,7 @@
 	      { className: 'fill orient-vertical-box' + hide },
 	      React.createElement(
 	        'div',
-	        { className: 'fill w-console-con' },
+	        { ref: 'console', className: 'fill w-console-con' },
 	        React.createElement(
 	          'ul',
 	          { className: 'w-log-list' },

@@ -1,5 +1,6 @@
 require('../css/console.css');
 var React = require('react');
+var ReactDOM = require('react-dom');
 var util = require('./util');
 var FilterInput = require('./filter-input');
 var dataCenter = require('./data-center');
@@ -20,7 +21,15 @@ module.exports = React.createClass({
     if (overCount > 0) {
       list = list.slice(overCount);
     }
-    this.setState({ list: list });
+    var con = ReactDOM.findDOMNode(this.refs.console);
+    var height = con.offsetHeight;
+    var scrollTop = con.scrollTop;
+    var atBottom = con.scrollHeight < height + scrollTop + 10;
+    this.setState({ list: list }, function() {
+      if (atBottom) {
+        con.scrollTop = con.scrollHeight;
+      }
+    });
   },
   componentDidMount: function() {
     var self = this;
@@ -38,7 +47,8 @@ module.exports = React.createClass({
 		return hide != util.getBoolean(nextProps.hide) || !hide;
 	},
   autoRefresh: function() {
-
+    var con = ReactDOM.findDOMNode(this.refs.console);
+    con.scrollTop = con.scrollHeight;
   },
   clear: function() {
     this.setState({ list: [] });
@@ -67,7 +77,7 @@ module.exports = React.createClass({
 
     return (
       <div className={'fill orient-vertical-box' + hide}>
-        <div className="fill w-console-con">
+        <div ref="console" className="fill w-console-con">
           <ul className="w-log-list">
             {list.map(function(log) {
               var hide = log.hide ? ' hide' : '';

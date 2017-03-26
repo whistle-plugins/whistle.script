@@ -45740,15 +45740,16 @@
 	  displayName: 'exports',
 
 	  getInitialState: function () {
+	    this.autoScroll = true;
 	    return { list: [] };
 	  },
 	  addLogs: function (list) {
 	    if (!list || !list.length) {
 	      return;
 	    }
-	    var con = this.console;
-	    var atBottom = con.scrollHeight < con.offsetHeight + con.scrollTop + 10;
-	    list = this.state.list.concat(list);
+	    var self = this;
+	    var atBottom = self.autoScroll;
+	    list = self.state.list.concat(list);
 	    var overCount = list.length - MAX_COUNT;
 	    if (overCount > 0) {
 	      if (!atBottom) {
@@ -45756,11 +45757,19 @@
 	      }
 	      list = list.slice(overCount);
 	    }
-	    this.setState({ list: list }, function () {
+	    if (self.props.hide) {
+	      self.state.list = list;
+	      return;
+	    }
+	    self.setState({ list: list }, function () {
 	      if (atBottom) {
-	        con.scrollTop = con.scrollHeight;
+	        self.autoRefresh();
 	      }
 	    });
+	  },
+	  onScroll: function () {
+	    var con = this.console;
+	    this.autoScroll = con.scrollHeight < con.offsetHeight + con.scrollTop + 10;
 	  },
 	  componentDidMount: function () {
 	    var self = this;
@@ -45785,6 +45794,12 @@
 	  autoRefresh: function () {
 	    var con = this.console;
 	    con.scrollTop = con.scrollHeight;
+	    this.autoScroll = true;
+	  },
+	  componentDidUpdate: function () {
+	    if (this.autoScroll) {
+	      this.autoRefresh();
+	    }
 	  },
 	  clear: function () {
 	    this.setState({ list: [] });
@@ -45816,7 +45831,7 @@
 	      { className: 'fill orient-vertical-box' + hide },
 	      React.createElement(
 	        'div',
-	        { ref: 'console', className: 'fill w-console-con' },
+	        { ref: 'console', className: 'fill w-console-con', onScroll: this.onScroll },
 	        React.createElement(
 	          'ul',
 	          { className: 'w-log-list' },

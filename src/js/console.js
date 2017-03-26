@@ -10,15 +10,16 @@ var MAX_COUNT = 360;
 
 module.exports = React.createClass({
   getInitialState: function() {
+    this.autoScroll = true;
     return { list: [] };
   },
   addLogs: function(list) {
     if (!list || !list.length) {
       return;
     }
-    var con = this.console;
-    var atBottom = con.scrollHeight < con.offsetHeight + con.scrollTop + 10;
-    list = this.state.list.concat(list);
+    var self = this;
+    var atBottom = self.autoScroll;
+    list = self.state.list.concat(list);
     var overCount = list.length - MAX_COUNT;
     if (overCount > 0) {
       if (!atBottom) {
@@ -26,11 +27,19 @@ module.exports = React.createClass({
       }
       list = list.slice(overCount);
     }
-    this.setState({ list: list }, function() {
+    if (self.props.hide) {
+      self.state.list = list;
+      return;
+    }
+    self.setState({ list: list }, function() {
       if (atBottom) {
-        con.scrollTop = con.scrollHeight;
+        self.autoRefresh();
       }
     });
+  },
+  onScroll: function() {
+    var con = this.console;
+    this.autoScroll = con.scrollHeight < con.offsetHeight + con.scrollTop + 10;
   },
   componentDidMount: function() {
     var self = this;
@@ -55,6 +64,12 @@ module.exports = React.createClass({
   autoRefresh: function() {
     var con = this.console;
     con.scrollTop = con.scrollHeight;
+    this.autoScroll = true;
+  },
+  componentDidUpdate: function() {
+    if (this.autoScroll) {
+      this.autoRefresh();
+    }
   },
   clear: function() {
     this.setState({ list: [] });
@@ -83,7 +98,7 @@ module.exports = React.createClass({
 
     return (
       <div className={'fill orient-vertical-box' + hide}>
-        <div ref="console" className="fill w-console-con">
+        <div ref="console" className="fill w-console-con" onScroll={this.onScroll}>
           <ul className="w-log-list">
             {list.map(function(log) {
               var hide = log.hide ? ' hide' : '';

@@ -100,48 +100,7 @@
 			dataCenter.setActive({ activeName: options.name });
 			this.setState({});
 		},
-		add: function (e) {
-			var self = this;
-			if (self._creating || !self.isEnterPressed(e)) {
-				return;
-			}
-
-			var dialog = $(ReactDOM.findDOMNode(this.refs.createTpl));
-			var input = dialog.find('.w-tpl-name');
-
-			if (!self._checkTplName(input)) {
-				return;
-			}
-			var name = $.trim(input.val());
-			var modal = self.state.modal;
-			if (modal.exists(name)) {
-				alert('`' + name + '` already exists');
-				input.select().focus();
-				return;
-			}
-			var typeBox = dialog.find('.w-template-type');
-			var type = typeBox.find('input:checked').attr('data-type') || 'default';
-			self._creating = true;
-			dataCenter.add({
-				name: name,
-				type: type
-			}, function (data) {
-				self._creating = false;
-				if (!data || data.ec !== 0) {
-					util.showSystemError();
-					return;
-				}
-				input.val('');
-				var item = modal.add(name, '');
-				if (item) {
-					item.type = type;
-					modal.setActive(item.name);
-					self.active(item);
-				}
-				dialog.modal('hide');
-				self.setState({});
-			});
-		},
+		add: function (e) {},
 		setValue: function (item) {
 			var self = this;
 			if (!item.changed) {
@@ -165,50 +124,7 @@
 		showEditDialog: function () {
 			var activeItem = this.state.modal.getActive();
 		},
-		edit: function (e) {
-			var self = this;
-			if (self._editing || !self.isEnterPressed(e)) {
-				return;
-			}
-			var modal = self.state.modal;
-			var activeItem = modal.getActive();
-			if (!activeItem) {
-				return;
-			}
-			var dialog = $(ReactDOM.findDOMNode(this.refs.editTpl));
-			var input = dialog.find('.w-tpl-name');
-
-			if (!self._checkTplName(input)) {
-				return;
-			}
-			var name = $.trim(input.val());
-			if (modal.exists(name) && activeItem.name != name) {
-				alert('`' + name + '` already exists');
-				input.select().focus();
-				return;
-			}
-
-			var typeBox = dialog.find('.w-template-type');
-			var type = typeBox.find('input:checked').attr('data-type') || 'default';
-			self._editing = true;
-			dataCenter.edit({
-				name: activeItem.name,
-				type: activeItem.type,
-				newName: name,
-				newType: type
-			}, function (data) {
-				self._editing = false;
-				if (!data || data.ec !== 0) {
-					util.showSystemError();
-					return;
-				}
-				input.val('');
-				activeItem.type = type;
-				modal.rename(activeItem.name, name);
-				dialog.modal('hide');
-				self.setState({});
-			});
-		},
+		rename: function (e) {},
 		isEnterPressed: function (e) {
 
 			return e.type != 'keydown' || e.keyCode == 13;
@@ -236,7 +152,7 @@
 			return true;
 		},
 		showScriptSettings: function () {
-			$(ReactDOM.findDOMNode(this.refs.tplSettingsDialog)).modal('show');
+			$(ReactDOM.findDOMNode(this.refs.scriptSettingsDialog)).modal('show');
 		},
 		clearConsole: function () {
 			var console = this.refs.console;
@@ -376,123 +292,7 @@
 				React.createElement(Console, { ref: 'console', hide: !isConsole }),
 				React.createElement(
 					'div',
-					{ ref: 'createTpl', className: 'modal fade w-create-tpl' },
-					React.createElement(
-						'div',
-						{ className: 'modal-dialog' },
-						React.createElement(
-							'div',
-							{ className: 'modal-content' },
-							React.createElement(
-								'ul',
-								{ className: 'modal-body' },
-								React.createElement(
-									'li',
-									{ className: 'w-template-name' },
-									React.createElement(
-										'label',
-										{ className: 'w-tpl-label' },
-										'Name:'
-									),
-									React.createElement('input', { onKeyDown: this.add, placeholder: 'template name', type: 'text', className: 'form-control w-tpl-name', maxLength: '64' })
-								),
-								React.createElement(
-									'li',
-									{ className: 'w-template-type' },
-									React.createElement(
-										'label',
-										{ className: 'w-tpl-label' },
-										'Engine:'
-									),
-									state.engineList.map(function (name) {
-										return React.createElement(
-											'label',
-											{ key: name, 'data-name': name },
-											React.createElement('input', { type: 'radio', 'data-type': name, name: 'tplName' }),
-											name
-										);
-									}),
-									React.createElement('a', { title: 'Help', className: 'glyphicon glyphicon-question-sign w-vase-help', href: 'https://github.com/whistle-plugins/whistle.vase#whistlevase', target: '_blank' })
-								)
-							),
-							React.createElement(
-								'div',
-								{ className: 'modal-footer' },
-								React.createElement(
-									'button',
-									{ type: 'button', className: 'btn btn-default', 'data-dismiss': 'modal' },
-									'Cancel'
-								),
-								React.createElement(
-									'button',
-									{ onClick: this.add, type: 'button', className: 'btn btn-primary' },
-									'Confirm'
-								)
-							)
-						)
-					)
-				),
-				React.createElement(
-					'div',
-					{ ref: 'editTpl', className: 'modal fade w-create-tpl' },
-					React.createElement(
-						'div',
-						{ className: 'modal-dialog' },
-						React.createElement(
-							'div',
-							{ className: 'modal-content' },
-							React.createElement(
-								'ul',
-								{ className: 'modal-body' },
-								React.createElement(
-									'li',
-									{ className: 'w-template-name' },
-									React.createElement(
-										'label',
-										{ className: 'w-tpl-label' },
-										'Name:'
-									),
-									React.createElement('input', { onKeyDown: this.edit, placeholder: 'template name', type: 'text', className: 'form-control w-tpl-name', maxLength: '64' })
-								),
-								React.createElement(
-									'li',
-									{ className: 'w-template-type' },
-									React.createElement(
-										'label',
-										{ className: 'w-tpl-label' },
-										'Engine:'
-									),
-									state.engineList.map(function (name) {
-										return React.createElement(
-											'label',
-											{ key: name, 'data-name': name },
-											React.createElement('input', { type: 'radio', 'data-type': name, name: 'tplName' }),
-											name
-										);
-									}),
-									React.createElement('a', { title: 'Help', className: 'glyphicon glyphicon-question-sign w-vase-help', href: 'https://github.com/whistle-plugins/whistle.vase#whistlevase', target: '_blank' })
-								)
-							),
-							React.createElement(
-								'div',
-								{ className: 'modal-footer' },
-								React.createElement(
-									'button',
-									{ type: 'button', className: 'btn btn-default', 'data-dismiss': 'modal' },
-									'Cancel'
-								),
-								React.createElement(
-									'button',
-									{ onClick: this.edit, type: 'button', className: 'btn btn-primary' },
-									'Confirm'
-								)
-							)
-						)
-					)
-				),
-				React.createElement(
-					'div',
-					{ ref: 'tplSettingsDialog', className: 'modal fade w-tpl-settings-dialog' },
+					{ ref: 'scriptSettingsDialog', className: 'modal fade w-tpl-settings-dialog' },
 					React.createElement(
 						'div',
 						{ className: 'modal-dialog' },

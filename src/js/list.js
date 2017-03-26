@@ -1,7 +1,6 @@
 require('./base-css.js');
 require('../css/list.css');
 var $ = require('jquery');
-var Clipboard = require('clipboard');
 var util = require('./util');
 var React = require('react');
 var ReactDOM = require('react-dom');
@@ -56,14 +55,8 @@ var List = React.createClass({
 				self.onClick(item);
 				e.preventDefault();
 			}
-		}).on('mouseleave', '.copy-data-clipboard-text', function() {
-			$(this).removeClass('disabled');
-		}).on('click', '.copy-data-clipboard-text', function() {
-			$(this).addClass('disabled');
 		});
 		this.ensureVisible();
-		
-		new Clipboard('.copy-data-clipboard-text');
 	},
 	shouldComponentUpdate: function(nextProps) {
 		var hide = util.getBoolean(this.props.hide);
@@ -146,10 +139,7 @@ var List = React.createClass({
 													'w-changed': item.changed,
 													'w-selected': item.selected
 												})} 
-												href="javascript:;">
-														{name}
-														<span title="Copy" className="glyphicon glyphicon-copy copy-data-clipboard-text" data-clipboard-action="copy" data-clipboard-text={name}></span>
-												</a>;
+												href="javascript:;">{name}</a>;
 								})
 							}
 						</div>

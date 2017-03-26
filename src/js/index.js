@@ -171,6 +171,7 @@ var Index = React.createClass({
 		var input = ReactDOM.findDOMNode(this.refs.createInput);
 		this.setState({ showCreateInput: true, showRenameInput: false },
 		function() {
+			input.select();
 			input.focus();
 		});
 	},
@@ -181,6 +182,7 @@ var Index = React.createClass({
 		var input = ReactDOM.findDOMNode(this.refs.renameInput);
 		this.setState({ showCreateInput: false, showRenameInput: true },
 		function() {
+			input.select();
 			input.focus();
 		});
 	},

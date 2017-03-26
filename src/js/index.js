@@ -58,7 +58,7 @@ var Index = React.createClass({
 			return false;
 		}
 		if (!/^[\w\-.]+$/.test(name)) {
-			alert('Can only input A-Za-z0-9.-');
+			alert('The name may only contain characters: A-Za-z0-9.-');
 			return false;
 		}
 		var modal = this.state.modal;

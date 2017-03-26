@@ -33370,8 +33370,7 @@
 					),
 					React.createElement(FilterInput, { onChange: this.onFilterChange })
 				),
-				React.createElement(Editor, _extends({}, self.props, { onChange: self.onChange, readOnly: !activeItem, value: activeItem ? activeItem.value : '',
-					mode: getSuffix(activeItem) }))
+				React.createElement(Editor, _extends({}, self.props, { onChange: self.onChange, readOnly: !activeItem, value: activeItem ? activeItem.value : '' }))
 			);
 		}
 	});

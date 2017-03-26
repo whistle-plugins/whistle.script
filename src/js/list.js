@@ -145,8 +145,7 @@ var List = React.createClass({
 						</div>
 						<FilterInput onChange={this.onFilterChange} />
 					</div>
-					<Editor {...self.props} onChange={self.onChange} readOnly={!activeItem} value={activeItem ? activeItem.value : ''} 
-					mode={getSuffix(activeItem)} />
+					<Editor {...self.props} onChange={self.onChange} readOnly={!activeItem} value={activeItem ? activeItem.value : ''} />
 				</Divider>
 		);
 	}

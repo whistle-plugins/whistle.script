@@ -52,20 +52,34 @@ var Index = React.createClass({
 		dataCenter.setActive({activeName: options.name});
 		this.setState({});
 	},
+	checkName: function(name) {
+		if (!name) {
+			alert('Please input the name.');
+			return false;
+		}
+		if (!/^[\w\-.]+$/.test(name)) {
+			alert('Can only input A-Za-z0-9.-');
+			return false;
+		}
+		var modal = this.state.modal;
+		if (modal.exists(name)) {
+			alert('`' + name + '` is already exist.');
+			return false;
+		}
+		return true;
+	},
 	create: function(e) {
 		if (!this.isSubmit(e)) {
 			return;
 		}
 		var input = ReactDOM.findDOMNode(this.refs.createInput);
 		var name = input.value.trim();
-		if (!name) {
-			return alert('Please input the name.');
+		if (!this.checkName(name)) {
+			return;
 		}
 		var modal = this.state.modal;
-		if (modal.exists(name)) {
-			return alert('`' + name + '` is already exist.');
-		}
-		modal.add(input.value);
+		modal.add(name);
+		modal.setActive(name, true);
 		input.value = '';
 		input.blur();
 		this.setState({});
@@ -96,7 +110,18 @@ var Index = React.createClass({
 		var activeItem = this.state.modal.getActive();
 	},
 	rename: function(e) {
-		
+		if (!this.isSubmit(e)) {
+			return;
+		}
+		var input = ReactDOM.findDOMNode(this.refs.renameInput);
+		var name = input.value.trim();
+		if (!this.checkName(name)) {
+			return;
+		}
+		var modal = this.state.modal;
+		var activeItem = modal.getActive();
+		modal.rename(activeItem.name, name);
+		this.setState({ showRenameInput: false });
 	},
 	isSubmit: function(e) {
 		return e.type != 'keydown' || e.keyCode == 13;
@@ -146,19 +171,13 @@ var Index = React.createClass({
 			return;
 		}
 
-		dataCenter.remove(data, function(result) {
-			if (!result || result.ec !== 0) {
-				util.showSystemError();
-				return;
-			}
-			var next = modal.getSibling(data.name);
-			modal.remove(data.name);
-			if (next) {
-				modal.setActive(next.name, true);
-				self.active(next);
-			}
-			self.setState({});
-		});
+		var next = modal.getSibling(data.name);
+		modal.remove(data.name);
+		if (next) {
+			modal.setActive(next.name, true);
+			self.active(next);
+		}
+		self.setState({});
 	},
 	onThemeChange: function(e) {
 		var theme = e.target.value;

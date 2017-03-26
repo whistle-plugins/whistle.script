@@ -54,7 +54,7 @@ var Index = React.createClass({
 	},
 	checkName: function(name) {
 		if (!name) {
-			alert('Please input the name.');
+			alert('The name can not be empty.');
 			return false;
 		}
 		if (!/^[\w\-.]+$/.test(name)) {

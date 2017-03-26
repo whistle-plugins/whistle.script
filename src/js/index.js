@@ -167,6 +167,29 @@ var Index = React.createClass({
 			showLineNumbers: showLineNumbers
 		});
 	},
+	showCreateInput: function() {
+		var input = ReactDOM.findDOMNode(this.refs.createInput);
+		this.setState({ showCreateInput: true, showRenameInput: false },
+		function() {
+			input.focus();
+		});
+	},
+	hideCreateInput: function() {
+		this.setState({ showCreateInput: false });
+	},
+	showRenameInput: function() {
+		var input = ReactDOM.findDOMNode(this.refs.renameInput);
+		this.setState({ showCreateInput: false, showRenameInput: true },
+		function() {
+			input.focus();
+		});
+	},
+	hideRenameInput: function() {
+		this.setState({ showRenameInput: false });
+	},
+	preventBlur: function(e) {
+		e.target.nodeName != 'INPUT' && e.preventDefault();
+	},
 	changeTab: function(e) {
 		var name = $(e.target).closest('a').attr('data-tab-name');
 		this.setState({ activeTabName: name });
@@ -183,15 +206,23 @@ var Index = React.createClass({
 					<div className="w-menu">
 						<a onClick={this.changeTab} className={ 'w-script-menu' + (isConsole ? '' : ' active') } data-tab-name="script" href="javascript:;"><span className="glyphicon glyphicon-file"></span>Script</a>
 						<a onClick={this.changeTab} className={ 'w-console-menu' + (isConsole ?' active' : '') } data-tab-name="console" href="javascript:;"><span className="glyphicon glyphicon-console"></span>Console</a>
-						<a onClick={this.create} style={{display: isConsole ? 'none' : ''}} className="w-create-menu" href="javascript:;"><span className="glyphicon glyphicon-plus"></span>Create</a>
-						<a onClick={this.rename} style={{display: isConsole ? 'none' : ''}} className="w-edit-menu" href="javascript:;"><span className="glyphicon glyphicon-edit"></span>Rename</a>
+						<a onClick={this.showCreateInput} style={{display: isConsole ? 'none' : ''}} className="w-create-menu" href="javascript:;"><span className="glyphicon glyphicon-plus"></span>Create</a>
+						<a onClick={this.showRenameInput} style={{display: isConsole ? 'none' : ''}} className="w-edit-menu" href="javascript:;"><span className="glyphicon glyphicon-edit"></span>Rename</a>
 						<a onClick={this.remove} style={{display: isConsole ? 'none' : ''}} className="w-remove-menu" href="javascript:;"><span className="glyphicon glyphicon-trash"></span>Delete</a>
 						<a onClick={this.save} style={{display: isConsole ? 'none' : ''}} className="w-save-menu" href="javascript:;"><span className="glyphicon glyphicon-save-file"></span>Save</a>
 						<a onClick={this.showScriptSettings} style={{display: isConsole ? 'none' : ''}} className="w-settings-menu" href="javascript:;"><span className="glyphicon glyphicon-cog"></span>Settings</a>
 						<a onClick={this.autoRefreshConsole} style={{display: isConsole ? '' : 'none'}} className="w-clear-console-menu" href="javascript:;"><span className="glyphicon glyphicon-play"></span>AutoRefresh</a>
 						<a onClick={this.clearConsole} style={{display: isConsole ? '' : 'none'}} className="w-auto-refresh-menu" href="javascript:;"><span className="glyphicon glyphicon-remove"></span>Clear</a>
 						<a className="w-help-menu" href="https://github.com/whistle-plugins/whistle.inspect" target="_blank"><span className="glyphicon glyphicon-question-sign"></span>Help</a>
-          </div>
+						<div onMouseDown={this.preventBlur} style={{display: state.showCreateInput ? 'block' : 'none'}} className="shadow w-input-menu-item w-create-input">
+							<input ref="createInput" onKeyDown={this.create} onBlur={this.hideCreateInput} type="text" maxLength="64" placeholder="Input the name" /><button type="button" 
+							onClick={this.create} className="btn btn-primary">Create</button>
+						</div>
+						<div onMouseDown={this.preventBlur} style={{display: state.showRenameInput ? 'block' : 'none'}} className="shadow w-input-menu-item w-rename-input">
+							<input ref="renameInput" onKeyDown={this.rename} onBlur={this.hideRenameInput} type="text" maxLength="64" placeholder="Input the new name" /><button type="button" 
+							onClick={this.rename} className="btn btn-primary">Rename</button>
+						</div>
+					</div>
 					<List hide={isConsole} onActive={this.active} theme={theme} fontSize={fontSize} lineNumbers={showLineNumbers} onSelect={this.setValue}  modal={this.state.modal} className="w-data-list" />
 					<Console ref="console" hide={!isConsole} />
 					<div ref="scriptSettingsDialog" className="modal fade w-tpl-settings-dialog">

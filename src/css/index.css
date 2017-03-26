@@ -19,3 +19,13 @@
 .w-engine-name {position: absolute; right: 10px;}
 .w-engine-name a {margin: 0; padding: 0; color: #337ab7}
 .w-engine-name a:hover {text-decoration: underline!important;}
+
+.w-input-menu-item {display: block; position: absolute; background: #fff; border: 1px solid #ccc;
+  border-radius: 2px; z-index: 101; top: 30px; display: none; white-space: nowrap;}
+.w-input-menu-item input {width: 246px; height: 32px; border: 1px solid #ccc; border-radius: 2px;
+  padding: 0 5px; vertical-align: middle;}
+.w-input-menu-item .btn {height: 32px; padding: 0 12px; vertical-align: middle; border-radius: 0;
+  border-right-top-radius: 2px; border-right-bottom-radius: 2px;}
+
+.w-create-input { left: 160px; }
+.w-rename-input { left: 236px; }

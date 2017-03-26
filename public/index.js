@@ -209,6 +209,27 @@
 				showLineNumbers: showLineNumbers
 			});
 		},
+		showCreateInput: function () {
+			var input = ReactDOM.findDOMNode(this.refs.createInput);
+			this.setState({ showCreateInput: true, showRenameInput: false }, function () {
+				input.focus();
+			});
+		},
+		hideCreateInput: function () {
+			this.setState({ showCreateInput: false });
+		},
+		showRenameInput: function () {
+			var input = ReactDOM.findDOMNode(this.refs.renameInput);
+			this.setState({ showCreateInput: false, showRenameInput: true }, function () {
+				input.focus();
+			});
+		},
+		hideRenameInput: function () {
+			this.setState({ showRenameInput: false });
+		},
+		preventBlur: function (e) {
+			e.target.nodeName != 'INPUT' && e.preventDefault();
+		},
 		changeTab: function (e) {
 			var name = $(e.target).closest('a').attr('data-tab-name');
 			this.setState({ activeTabName: name });
@@ -241,13 +262,13 @@
 					),
 					React.createElement(
 						'a',
-						{ onClick: this.create, style: { display: isConsole ? 'none' : '' }, className: 'w-create-menu', href: 'javascript:;' },
+						{ onClick: this.showCreateInput, style: { display: isConsole ? 'none' : '' }, className: 'w-create-menu', href: 'javascript:;' },
 						React.createElement('span', { className: 'glyphicon glyphicon-plus' }),
 						'Create'
 					),
 					React.createElement(
 						'a',
-						{ onClick: this.rename, style: { display: isConsole ? 'none' : '' }, className: 'w-edit-menu', href: 'javascript:;' },
+						{ onClick: this.showRenameInput, style: { display: isConsole ? 'none' : '' }, className: 'w-edit-menu', href: 'javascript:;' },
 						React.createElement('span', { className: 'glyphicon glyphicon-edit' }),
 						'Rename'
 					),
@@ -286,6 +307,28 @@
 						{ className: 'w-help-menu', href: 'https://github.com/whistle-plugins/whistle.inspect', target: '_blank' },
 						React.createElement('span', { className: 'glyphicon glyphicon-question-sign' }),
 						'Help'
+					),
+					React.createElement(
+						'div',
+						{ onMouseDown: this.preventBlur, style: { display: state.showCreateInput ? 'block' : 'none' }, className: 'shadow w-input-menu-item w-create-input' },
+						React.createElement('input', { ref: 'createInput', onKeyDown: this.create, onBlur: this.hideCreateInput, type: 'text', maxLength: '64', placeholder: 'Input the name' }),
+						React.createElement(
+							'button',
+							{ type: 'button',
+								onClick: this.create, className: 'btn btn-primary' },
+							'Create'
+						)
+					),
+					React.createElement(
+						'div',
+						{ onMouseDown: this.preventBlur, style: { display: state.showRenameInput ? 'block' : 'none' }, className: 'shadow w-input-menu-item w-rename-input' },
+						React.createElement('input', { ref: 'renameInput', onKeyDown: this.rename, onBlur: this.hideRenameInput, type: 'text', maxLength: '64', placeholder: 'Input the new name' }),
+						React.createElement(
+							'button',
+							{ type: 'button',
+								onClick: this.rename, className: 'btn btn-primary' },
+							'Rename'
+						)
 					)
 				),
 				React.createElement(List, { hide: isConsole, onActive: this.active, theme: theme, fontSize: fontSize, lineNumbers: showLineNumbers, onSelect: this.setValue, modal: this.state.modal, className: 'w-data-list' }),
@@ -806,7 +849,7 @@
 
 
 	// module
-	exports.push([module.id, ".w-menu .w-menu-wrapper {display: inline-block; position: relative; height: 30px;}\n.w-import-menu-item, .w-exports-menu-item {left: 5px; display: none!important;}\n.w-menu .w-menu-wrapper:hover .w-import-menu-item, \n.w-menu .w-menu-wrapper:hover .w-exports-menu-item {display: block!important;}\n\n.w-template-name {padding-bottom: 10px;}\n.w-template-name input {display: inline-block; width: 330px;}\n.w-template-name p {color: #aaa; font-size: 12px; padding-left: 60px;}\n.w-create-tpl .modal-content {width: 420px;}\n.w-create-tpl label {font-weight: normal;}\n.w-create-tpl .w-tpl-label {width: 60px; margin-right: 0;}\n.w-template-type .w-tpl-label {position: absolute;}\n.w-template-type  { position: relative; padding-left: 60px;}\n.w-template-type label {margin-right: 15px; white-space: nowrap; left: 0; top: 0;}\n.w-template-type label input {margin-right: 5px;}\n.w-template-type .w-vase-help {text-decoration: none;}\n\n.w-tpl-settings-dialog .modal-dialog {width: 300px;}\n.w-engine-name {position: absolute; right: 10px;}\n.w-engine-name a {margin: 0; padding: 0; color: #337ab7}\n.w-engine-name a:hover {text-decoration: underline!important;}\n", ""]);
+	exports.push([module.id, ".w-menu .w-menu-wrapper {display: inline-block; position: relative; height: 30px;}\n.w-import-menu-item, .w-exports-menu-item {left: 5px; display: none!important;}\n.w-menu .w-menu-wrapper:hover .w-import-menu-item, \n.w-menu .w-menu-wrapper:hover .w-exports-menu-item {display: block!important;}\n\n.w-template-name {padding-bottom: 10px;}\n.w-template-name input {display: inline-block; width: 330px;}\n.w-template-name p {color: #aaa; font-size: 12px; padding-left: 60px;}\n.w-create-tpl .modal-content {width: 420px;}\n.w-create-tpl label {font-weight: normal;}\n.w-create-tpl .w-tpl-label {width: 60px; margin-right: 0;}\n.w-template-type .w-tpl-label {position: absolute;}\n.w-template-type  { position: relative; padding-left: 60px;}\n.w-template-type label {margin-right: 15px; white-space: nowrap; left: 0; top: 0;}\n.w-template-type label input {margin-right: 5px;}\n.w-template-type .w-vase-help {text-decoration: none;}\n\n.w-tpl-settings-dialog .modal-dialog {width: 300px;}\n.w-engine-name {position: absolute; right: 10px;}\n.w-engine-name a {margin: 0; padding: 0; color: #337ab7}\n.w-engine-name a:hover {text-decoration: underline!important;}\n\n.w-input-menu-item {display: block; position: absolute; background: #fff; border: 1px solid #ccc;\n  border-radius: 2px; z-index: 101; top: 30px; display: none; white-space: nowrap;}\n.w-input-menu-item input {width: 246px; height: 32px; border: 1px solid #ccc; border-radius: 2px;\n  padding: 0 5px; vertical-align: middle;}\n.w-input-menu-item .btn {height: 32px; padding: 0 12px; vertical-align: middle; border-radius: 0;\n  border-right-top-radius: 2px; border-right-bottom-radius: 2px;}\n\n.w-create-input { left: 160px; }\n.w-rename-input { left: 236px; }\n", ""]);
 
 	// exports
 

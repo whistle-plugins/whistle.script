@@ -52,8 +52,23 @@ var Index = React.createClass({
 		dataCenter.setActive({activeName: options.name});
 		this.setState({});
 	},
-	add: function(e) {
-		
+	create: function(e) {
+		if (!this.isSubmit(e)) {
+			return;
+		}
+		var input = ReactDOM.findDOMNode(this.refs.createInput);
+		var name = input.value.trim();
+		if (!name) {
+			return alert('Please input the name.');
+		}
+		var modal = this.state.modal;
+		if (modal.exists(name)) {
+			return alert('`' + name + '` is already exist.');
+		}
+		modal.add(input.value);
+		input.value = '';
+		input.blur();
+		this.setState({});
 	},
 	setValue: function(item) {
 		var self = this;
@@ -83,8 +98,7 @@ var Index = React.createClass({
 	rename: function(e) {
 		
 	},
-	isEnterPressed: function(e) {
-
+	isSubmit: function(e) {
 		return e.type != 'keydown' || e.keyCode == 13;
 	},
 	convertName: function(name) {
@@ -179,7 +193,12 @@ var Index = React.createClass({
 		this.setState({ showCreateInput: false });
 	},
 	showRenameInput: function() {
+		var activeItem = this.state.modal.getActive();
+		if (!activeItem) {
+			return;
+		}
 		var input = ReactDOM.findDOMNode(this.refs.renameInput);
+		input.value = activeItem.name;
 		this.setState({ showCreateInput: false, showRenameInput: true },
 		function() {
 			input.select();

@@ -45746,10 +45746,8 @@
 	    if (!list || !list.length) {
 	      return;
 	    }
-	    var con = ReactDOM.findDOMNode(this.refs.console);
-	    var height = con.offsetHeight;
-	    var scrollTop = con.scrollTop;
-	    var atBottom = con.scrollHeight < height + scrollTop + 10;
+	    var con = this.console;
+	    var atBottom = con.scrollHeight < con.offsetHeight + con.scrollTop + 10;
 	    list = this.state.list.concat(list);
 	    var overCount = list.length - MAX_COUNT;
 	    if (overCount > 0) {
@@ -45766,6 +45764,8 @@
 	  },
 	  componentDidMount: function () {
 	    var self = this;
+	    var con = ReactDOM.findDOMNode(this.refs.console);
+	    this.console = con;
 	    (function loadLogs() {
 	      if (self.state.list.length > MAX_COUNT) {
 	        return setTimeout(loadLogs, 1000);
@@ -45783,7 +45783,7 @@
 	    return hide != util.getBoolean(nextProps.hide) || !hide;
 	  },
 	  autoRefresh: function () {
-	    var con = ReactDOM.findDOMNode(this.refs.console);
+	    var con = this.console;
 	    con.scrollTop = con.scrollHeight;
 	  },
 	  clear: function () {

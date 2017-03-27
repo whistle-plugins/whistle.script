@@ -136,7 +136,6 @@
 				modal.add(name);
 				modal.setActive(name, true);
 				input.value = '';
-				self.active(params);
 				self.setState({});
 			});
 		},
@@ -174,8 +173,20 @@
 			}
 			var modal = this.state.modal;
 			var activeItem = modal.getActive();
-			modal.rename(activeItem.name, name);
-			this.setState({ showRenameInput: false });
+			input.blur();
+			var self = this;
+			dataCenter.rename({
+				name: activeItem.name,
+				newName: name
+			}, function (data) {
+				if (!data || data.ec !== 0) {
+					util.showSystemError();
+					return;
+				}
+				input.value = '';
+				modal.rename(activeItem.name, name);
+				this.setState({});
+			});
 		},
 		isSubmit: function (e) {
 			return e.type != 'keydown' || e.keyCode == 13;
@@ -220,18 +231,24 @@
 		remove: function () {
 			var self = this;
 			var modal = self.state.modal;
-			var data = modal.getActive();
-			if (!data || !confirm('Confirm delete `' + data.name + '`?')) {
+			var activeItem = modal.getActive();
+			if (!activeItem || !confirm('Confirm delete `' + activeItem.name + '`?')) {
 				return;
 			}
 
-			var next = modal.getSibling(data.name);
-			modal.remove(data.name);
-			if (next) {
-				modal.setActive(next.name, true);
-				self.active(next);
-			}
-			self.setState({});
+			var next = modal.getSibling(activeItem.name);
+			dataCenter.remove({ name: activeItem.name }, function (data) {
+				if (!data || data.ec !== 0) {
+					util.showSystemError();
+					return;
+				}
+				modal.remove(activeItem.name);
+				if (next) {
+					modal.setActive(next.name, true);
+					self.active(next);
+				}
+				self.setState({});
+			});
 		},
 		onThemeChange: function (e) {
 			var theme = e.target.value;

@@ -9,12 +9,10 @@ module.exports = $.extend(createCgi({
   init: '/cgi-bin/init',
   getLogs: '/cgi-bin/log',
 }, GET_CONF), createCgi({
-  setActive: '/cgi-bin/set-active',
-  remove: '/cgi-bin/remove',
-  add: '/cgi-bin/add',
-  edit: '/cgi-bin/edit',
-  setTheme: '/cgi-bin/set-theme',
+  setActive: '/cgi-bin/active',
+  remove: '/cgi-bin/delete',
+  create: '/cgi-bin/create',
+  rename: '/cgi-bin/rename',
+  setSettings: '/cgi-bin/settings',
   setValue: '/cgi-bin/set-value',
-  setFontSize: '/cgi-bin/set-font-size',
-  showLineNumbers: '/cgi-bin/show-line-numbers',
 }, POST_CONF));

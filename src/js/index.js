@@ -49,7 +49,7 @@ var Index = React.createClass({
 		};
 	},
 	active: function(options) {
-		dataCenter.setActive({activeName: options.name});
+		dataCenter.setActive({name: options.name});
 		this.setState({});
 	},
 	checkName: function(name) {
@@ -69,20 +69,28 @@ var Index = React.createClass({
 		return true;
 	},
 	create: function(e) {
-		if (!this.isSubmit(e)) {
+    var self = this;
+		if (!self.isSubmit(e)) {
 			return;
 		}
-		var input = ReactDOM.findDOMNode(this.refs.createInput);
+		var input = ReactDOM.findDOMNode(self.refs.createInput);
 		var name = input.value.trim();
-		if (!this.checkName(name)) {
+		if (!self.checkName(name)) {
 			return;
 		}
-		var modal = this.state.modal;
-		modal.add(name);
-		modal.setActive(name, true);
-		input.value = '';
-		input.blur();
-		this.setState({});
+		var modal = self.state.modal;
+    input.blur();
+		var params = { name: name };
+    dataCenter.create(params, function(data) {
+      if (!data || data.ec !== 0) {
+        return util.showSystemError();
+      }
+      modal.add(name);
+      modal.setActive(name, true);
+      input.value = '';
+			self.active(params);
+      self.setState({});
+    });
 	},
 	setValue: function(item) {
 		var self = this;

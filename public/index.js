@@ -44983,7 +44983,7 @@
 	  setTheme: '/cgi-bin/setTheme',
 	  setFontSize: '/cgi-bin/setFontSize',
 	  showLineNumbers: '/cgi-bin/showLineNumbers',
-	  setValue: '/cgi-bin/setValue'
+	  setValue: '/cgi-bin/create'
 	}, POST_CONF));
 
 /***/ },

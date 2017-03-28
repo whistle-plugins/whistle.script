@@ -45016,7 +45016,9 @@
 	  remove: '/cgi-bin/delete',
 	  create: '/cgi-bin/create',
 	  rename: '/cgi-bin/rename',
-	  setTheme: '/cgi-bin/theme',
+	  setTheme: '/cgi-bin/setTheme',
+	  setFontSize: '/cgi-bin/setFontSize',
+	  showLineNumbers: '/cgi-bin/showLineNumbers',
 	  setValue: '/cgi-bin/set-value'
 	}, POST_CONF));
 

@@ -13,6 +13,8 @@ module.exports = $.extend(createCgi({
   remove: '/cgi-bin/delete',
   create: '/cgi-bin/create',
   rename: '/cgi-bin/rename',
-  setSettings: '/cgi-bin/settings',
+  setTheme: '/cgi-bin/setTheme',
+  setFontSize: '/cgi-bin/setFontSize',
+  showLineNumbers: '/cgi-bin/showLineNumbers',
   setValue: '/cgi-bin/set-value',
 }, POST_CONF));

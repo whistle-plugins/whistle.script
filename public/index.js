@@ -184,7 +184,7 @@
 	      input.value = '';
 	      modal.rename(activeItem.name, name);
 	      self.active(activeItem);
-	      this.setState({});
+	      self.setState({});
 	    });
 	  },
 	  isSubmit: function (e) {

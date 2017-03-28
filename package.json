@@ -1,7 +1,7 @@
 {
   "name": "whistle.script",
   "description": "Programmable plugin for whistle",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "author": "avenwu <avenwu@vip.qq.com>",
   "contributors": [],
   "license": "MIT",

@@ -45,7 +45,7 @@
     "webpack": "^1.14.0"
   },
   "engines": {
-    "node": ">=4"
+    "node": ">=6"
   },
   "dependencies": {
     "iconv-lite": "^0.4.15",

@@ -132,6 +132,7 @@
 	      }
 	      modal.add(name);
 	      modal.setActive(name, true);
+	      self.active(params);
 	      input.value = '';
 	      self.setState({});
 	    });
@@ -182,6 +183,7 @@
 	      }
 	      input.value = '';
 	      modal.rename(activeItem.name, name);
+	      self.active(activeItem);
 	      this.setState({});
 	    });
 	  },
@@ -307,7 +309,7 @@
 	        ),
 	        React.createElement(
 	          'a',
-	          { onClick: this.changeTab, className: 'w-console-menu' + (isConsole ? ' active' : ''), 'data-tab-name': 'console', href: 'javascript:;' },
+	          { onClick: this.changeTab, onDoubleClick: this.clearConsole, className: 'w-console-menu' + (isConsole ? ' active' : ''), 'data-tab-name': 'console', href: 'javascript:;' },
 	          React.createElement('span', { className: 'glyphicon glyphicon-console' }),
 	          'Console'
 	        ),

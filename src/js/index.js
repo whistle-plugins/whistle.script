@@ -84,6 +84,7 @@ var Index = React.createClass({
       }
       modal.add(name);
       modal.setActive(name, true);
+      self.active(params);
       input.value = '';
       self.setState({});
     });
@@ -136,6 +137,7 @@ var Index = React.createClass({
       }
       input.value = '';
       modal.rename(activeItem.name, name);
+      self.active(activeItem);
       this.setState({});
     });
   },
@@ -252,7 +254,7 @@ var Index = React.createClass({
     return (<div className="container orient-vertical-box">
           <div className="w-menu">
             <a onClick={this.changeTab} className={ 'w-script-menu' + (isConsole ? '' : ' active') } data-tab-name="script" href="javascript:;"><span className="glyphicon glyphicon-file"></span>Script</a>
-            <a onClick={this.changeTab} className={ 'w-console-menu' + (isConsole ?' active' : '') } data-tab-name="console" href="javascript:;"><span className="glyphicon glyphicon-console"></span>Console</a>
+            <a onClick={this.changeTab} onDoubleClick={this.clearConsole} className={ 'w-console-menu' + (isConsole ?' active' : '') } data-tab-name="console" href="javascript:;"><span className="glyphicon glyphicon-console"></span>Console</a>
             <a onClick={this.showCreateInput} style={{display: isConsole ? 'none' : ''}} className="w-create-menu" href="javascript:;"><span className="glyphicon glyphicon-plus"></span>Create</a>
             <a onClick={this.showRenameInput} style={{display: isConsole ? 'none' : ''}} className="w-edit-menu" href="javascript:;"><span className="glyphicon glyphicon-edit"></span>Rename</a>
             <a onClick={this.remove} style={{display: isConsole ? 'none' : ''}} className="w-remove-menu" href="javascript:;"><span className="glyphicon glyphicon-trash"></span>Delete</a>

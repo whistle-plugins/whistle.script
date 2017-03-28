@@ -16,5 +16,5 @@ module.exports = $.extend(createCgi({
   setTheme: '/cgi-bin/setTheme',
   setFontSize: '/cgi-bin/setFontSize',
   showLineNumbers: '/cgi-bin/showLineNumbers',
-  setValue: '/cgi-bin/set-value',
+  setValue: '/cgi-bin/setValue',
 }, POST_CONF));

@@ -8,25 +8,6 @@ var Divider = require('./divider');
 var Editor = require('./editor');
 var FilterInput = require('./filter-input');
 
-function getSuffix(item) {
-	if (!item || typeof item.name != 'string') {
-		return '';
-	}
-	
-	switch(item.type) {
-		case 'default':
-			var name = item.name;
-			var index = name.lastIndexOf('.');
-			return index == -1 ? '' : name.substring(index + 1);
-		case 'script':
-			return 'js';
-		case 'jade':
-			return 'jade';
-		default:
-			return 'html';
-	}
-}
-
 var List = React.createClass({
 	componentDidMount: function() {
 		var self = this;
@@ -127,7 +108,7 @@ var List = React.createClass({
 								list.map(function(name) {
 									var item = data[name];
 									
-									return <a ref={name} title={item.type} style={{display: item.hide ? 'none' : null}} key={item.key} data-key={item.key} href="javascript:;"
+									return <a ref={name} style={{display: item.hide ? 'none' : null}} key={item.key} data-key={item.key} href="javascript:;"
 												onClick={function() {
 													self.onClick(item);
 												}} 

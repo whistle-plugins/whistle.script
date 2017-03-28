@@ -29,6 +29,10 @@ module.exports = React.createClass({
     }
     if (self.props.hide) {
       self.state.list = list;
+      var onUpdate = this.props.onUpdate;
+      if (typeof onUpdate === 'function') {
+        onUpdate();
+      }
       return;
     }
     self.setState({ list: list }, function() {

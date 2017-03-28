@@ -241,7 +241,14 @@ var Index = React.createClass({
   },
   changeTab: function(e) {
     var name = $(e.target).closest('a').attr('data-tab-name');
-    this.setState({ activeTabName: name });
+    var state = { activeTabName: name };
+    if (name === 'console') {
+      state.hasNewLogs = false;
+    }
+    this.setState(state);
+  },
+  showHasNewLogs: function() {
+    this.setState({ hasNewLogs: true });
   },
   render: function() {
     var state = this.state;
@@ -254,7 +261,10 @@ var Index = React.createClass({
     return (<div className="container orient-vertical-box">
           <div className="w-menu">
             <a onClick={this.changeTab} className={ 'w-script-menu' + (isConsole ? '' : ' active') } data-tab-name="script" href="javascript:;"><span className="glyphicon glyphicon-file"></span>Script</a>
-            <a onClick={this.changeTab} onDoubleClick={this.clearConsole} className={ 'w-console-menu' + (isConsole ?' active' : '') } data-tab-name="console" href="javascript:;"><span className="glyphicon glyphicon-console"></span>Console</a>
+            <a onClick={this.changeTab} onDoubleClick={this.clearConsole} className={ 'w-console-menu' + (isConsole ?' active' : '') } data-tab-name="console" href="javascript:;">
+              <span className="glyphicon glyphicon-console"></span>Console
+              <i className={'w-has-new-logs' + (state.hasNewLogs ? '' : ' hide')}></i>
+            </a>
             <a onClick={this.showCreateInput} style={{display: isConsole ? 'none' : ''}} className="w-create-menu" href="javascript:;"><span className="glyphicon glyphicon-plus"></span>Create</a>
             <a onClick={this.showRenameInput} style={{display: isConsole ? 'none' : ''}} className="w-edit-menu" href="javascript:;"><span className="glyphicon glyphicon-edit"></span>Rename</a>
             <a onClick={this.remove} style={{display: isConsole ? 'none' : ''}} className="w-remove-menu" href="javascript:;"><span className="glyphicon glyphicon-trash"></span>Delete</a>
@@ -273,7 +283,7 @@ var Index = React.createClass({
             </div>
           </div>
           <List hide={isConsole} onActive={this.active} theme={theme} fontSize={fontSize} lineNumbers={showLineNumbers} onSelect={this.setValue}  modal={this.state.modal} className="w-data-list" />
-          <Console ref="console" hide={!isConsole} />
+          <Console onUpdate={this.showHasNewLogs} ref="console" hide={!isConsole} />
           <div ref="scriptSettingsDialog" className="modal fade w-tpl-settings-dialog">
             <div className="modal-dialog">
                 <div className="modal-content">

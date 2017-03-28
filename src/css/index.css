@@ -29,3 +29,7 @@
 
 .w-create-input { left: 160px; }
 .w-rename-input { left: 236px; }
+
+.w-console-menu { position: relative; }
+.w-has-new-logs { display: block; background: red; border-radius: 6px; width: 6px; height: 6px; 
+position: absolute; top: 2px; right: 2px; }

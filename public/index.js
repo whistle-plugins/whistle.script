@@ -285,7 +285,14 @@
 	  },
 	  changeTab: function (e) {
 	    var name = $(e.target).closest('a').attr('data-tab-name');
-	    this.setState({ activeTabName: name });
+	    var state = { activeTabName: name };
+	    if (name === 'console') {
+	      state.hasNewLogs = false;
+	    }
+	    this.setState(state);
+	  },
+	  showHasNewLogs: function () {
+	    this.setState({ hasNewLogs: true });
 	  },
 	  render: function () {
 	    var state = this.state;
@@ -311,7 +318,8 @@
 	          'a',
 	          { onClick: this.changeTab, onDoubleClick: this.clearConsole, className: 'w-console-menu' + (isConsole ? ' active' : ''), 'data-tab-name': 'console', href: 'javascript:;' },
 	          React.createElement('span', { className: 'glyphicon glyphicon-console' }),
-	          'Console'
+	          'Console',
+	          React.createElement('i', { className: 'w-has-new-logs' + (state.hasNewLogs ? '' : ' hide') })
 	        ),
 	        React.createElement(
 	          'a',
@@ -385,7 +393,7 @@
 	        )
 	      ),
 	      React.createElement(List, { hide: isConsole, onActive: this.active, theme: theme, fontSize: fontSize, lineNumbers: showLineNumbers, onSelect: this.setValue, modal: this.state.modal, className: 'w-data-list' }),
-	      React.createElement(Console, { ref: 'console', hide: !isConsole }),
+	      React.createElement(Console, { onUpdate: this.showHasNewLogs, ref: 'console', hide: !isConsole }),
 	      React.createElement(
 	        'div',
 	        { ref: 'scriptSettingsDialog', className: 'modal fade w-tpl-settings-dialog' },
@@ -901,7 +909,7 @@
 
 
 	// module
-	exports.push([module.id, ".w-menu .w-menu-wrapper {display: inline-block; position: relative; height: 30px;}\n.w-import-menu-item, .w-exports-menu-item {left: 5px; display: none!important;}\n.w-menu .w-menu-wrapper:hover .w-import-menu-item, \n.w-menu .w-menu-wrapper:hover .w-exports-menu-item {display: block!important;}\n\n.w-template-name {padding-bottom: 10px;}\n.w-template-name input {display: inline-block; width: 330px;}\n.w-template-name p {color: #aaa; font-size: 12px; padding-left: 60px;}\n.w-create-tpl .modal-content {width: 420px;}\n.w-create-tpl label {font-weight: normal;}\n.w-create-tpl .w-tpl-label {width: 60px; margin-right: 0;}\n.w-template-type .w-tpl-label {position: absolute;}\n.w-template-type  { position: relative; padding-left: 60px;}\n.w-template-type label {margin-right: 15px; white-space: nowrap; left: 0; top: 0;}\n.w-template-type label input {margin-right: 5px;}\n.w-template-type .w-vase-help {text-decoration: none;}\n\n.w-tpl-settings-dialog .modal-dialog {width: 300px;}\n.w-engine-name {position: absolute; right: 10px;}\n.w-engine-name a {margin: 0; padding: 0; color: #337ab7}\n.w-engine-name a:hover {text-decoration: underline!important;}\n\n.w-input-menu-item {display: block; position: absolute; background: #fff; border: 1px solid #ccc;\n  border-radius: 2px; z-index: 101; top: 30px; display: none; white-space: nowrap;}\n.w-input-menu-item input {width: 246px; height: 32px; border: 1px solid #ccc; border-radius: 2px;\n  padding: 0 5px; vertical-align: middle;}\n.w-input-menu-item .btn {height: 32px; padding: 0 12px; vertical-align: middle; border-radius: 0;\n  border-right-top-radius: 2px; border-right-bottom-radius: 2px;}\n\n.w-create-input { left: 160px; }\n.w-rename-input { left: 236px; }\n", ""]);
+	exports.push([module.id, ".w-menu .w-menu-wrapper {display: inline-block; position: relative; height: 30px;}\n.w-import-menu-item, .w-exports-menu-item {left: 5px; display: none!important;}\n.w-menu .w-menu-wrapper:hover .w-import-menu-item, \n.w-menu .w-menu-wrapper:hover .w-exports-menu-item {display: block!important;}\n\n.w-template-name {padding-bottom: 10px;}\n.w-template-name input {display: inline-block; width: 330px;}\n.w-template-name p {color: #aaa; font-size: 12px; padding-left: 60px;}\n.w-create-tpl .modal-content {width: 420px;}\n.w-create-tpl label {font-weight: normal;}\n.w-create-tpl .w-tpl-label {width: 60px; margin-right: 0;}\n.w-template-type .w-tpl-label {position: absolute;}\n.w-template-type  { position: relative; padding-left: 60px;}\n.w-template-type label {margin-right: 15px; white-space: nowrap; left: 0; top: 0;}\n.w-template-type label input {margin-right: 5px;}\n.w-template-type .w-vase-help {text-decoration: none;}\n\n.w-tpl-settings-dialog .modal-dialog {width: 300px;}\n.w-engine-name {position: absolute; right: 10px;}\n.w-engine-name a {margin: 0; padding: 0; color: #337ab7}\n.w-engine-name a:hover {text-decoration: underline!important;}\n\n.w-input-menu-item {display: block; position: absolute; background: #fff; border: 1px solid #ccc;\n  border-radius: 2px; z-index: 101; top: 30px; display: none; white-space: nowrap;}\n.w-input-menu-item input {width: 246px; height: 32px; border: 1px solid #ccc; border-radius: 2px;\n  padding: 0 5px; vertical-align: middle;}\n.w-input-menu-item .btn {height: 32px; padding: 0 12px; vertical-align: middle; border-radius: 0;\n  border-right-top-radius: 2px; border-right-bottom-radius: 2px;}\n\n.w-create-input { left: 160px; }\n.w-rename-input { left: 236px; }\n\n.w-console-menu { position: relative; }\n.w-has-new-logs { display: block; background: red; border-radius: 6px; width: 6px; height: 6px; \nposition: absolute; top: 2px; right: 2px; }\n", ""]);
 
 	// exports
 
@@ -44826,6 +44834,10 @@
 	    }
 	    if (self.props.hide) {
 	      self.state.list = list;
+	      var onUpdate = this.props.onUpdate;
+	      if (typeof onUpdate === 'function') {
+	        onUpdate();
+	      }
 	      return;
 	    }
 	    self.setState({ list: list }, function () {

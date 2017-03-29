@@ -48,6 +48,7 @@
     "node": ">=6"
   },
   "dependencies": {
+    "co": "^4.6.0",
     "iconv-lite": "^0.4.15",
     "koa": "^1.4.0",
     "koa-bodyparser": "^2.5.0",

@@ -44985,17 +44985,17 @@
 	var GET_CONF = $.extend({ cache: false }, DEFAULT_CONF);
 
 	module.exports = $.extend(createCgi({
-	  init: '/cgi-bin/init',
-	  getLogs: '/cgi-bin/log'
+	  init: 'cgi-bin/init',
+	  getLogs: 'cgi-bin/log'
 	}, GET_CONF), createCgi({
-	  setActive: '/cgi-bin/active',
-	  remove: '/cgi-bin/delete',
-	  create: '/cgi-bin/create',
-	  rename: '/cgi-bin/rename',
-	  setTheme: '/cgi-bin/setTheme',
-	  setFontSize: '/cgi-bin/setFontSize',
-	  showLineNumbers: '/cgi-bin/showLineNumbers',
-	  setValue: '/cgi-bin/create'
+	  setActive: 'cgi-bin/active',
+	  remove: 'cgi-bin/delete',
+	  create: 'cgi-bin/create',
+	  rename: 'cgi-bin/rename',
+	  setTheme: 'cgi-bin/setTheme',
+	  setFontSize: 'cgi-bin/setFontSize',
+	  showLineNumbers: 'cgi-bin/showLineNumbers',
+	  setValue: 'cgi-bin/create'
 	}, POST_CONF));
 
 /***/ },

@@ -272,7 +272,7 @@ var Index = React.createClass({
             <a onClick={this.showScriptSettings} style={{display: isConsole ? 'none' : ''}} className="w-settings-menu" href="javascript:;"><span className="glyphicon glyphicon-cog"></span>Settings</a>
             <a onClick={this.autoRefreshConsole} style={{display: isConsole ? '' : 'none'}} className="w-clear-console-menu" href="javascript:;"><span className="glyphicon glyphicon-play"></span>AutoRefresh</a>
             <a onClick={this.clearConsole} style={{display: isConsole ? '' : 'none'}} className="w-auto-refresh-menu" href="javascript:;"><span className="glyphicon glyphicon-remove"></span>Clear</a>
-            <a className="w-help-menu" href="https://github.com/whistle-plugins/whistle.inspect" target="_blank"><span className="glyphicon glyphicon-question-sign"></span>Help</a>
+            <a className="w-help-menu" href="https://github.com/whistle-plugins/whistle.script" target="_blank"><span className="glyphicon glyphicon-question-sign"></span>Help</a>
             <div onMouseDown={this.preventBlur} style={{display: state.showCreateInput ? 'block' : 'none'}} className="shadow w-input-menu-item w-create-input">
               <input ref="createInput" onKeyDown={this.create} onBlur={this.hideCreateInput} type="text" maxLength="64" placeholder="Input the name" /><button type="button"
               onClick={this.create} className="btn btn-primary">Create</button>

@@ -39,11 +39,76 @@ sudo npm install -g whistle.script
 
 # 使用
 
+打开script插件的界面，创建一个名字为 `test` 的脚本:
 
+1. 可以通过 `Plugins->Home->script`打开或右键并选择 `在新标签页中打开` 
+2. 直接访问 [http://local.whistlejs.com/plugin.script](http://local.whistlejs.com/plugin.script/)
 
-# API
+效果见图: [whistle.script界面]()
 
+#### 设置规则
 
+1. 设置HTTP或HTTPs请求的[whistle规则](https://avwo.github.io/whistle/rules/)(操作HTTPs需要[开启HTTPs拦截](https://avwo.github.io/whistle/webui/https.html))
+
+   在界面中的`test` 脚本输入(也可以在其它编辑器编辑后再copy进来):
+
+   ```
+   exports.handleRequestRules = (ctx) => {
+   	// ctx.fullUrl 可以获取请求url
+   	// ctx.headers 可以获取请求头
+   	// ctx.options 里面包含一些特殊的请求头字段，分别可以获取一些额外信息，如请求方法、设置的规则等
+   	ctx.rules = ['www.qq.com file://{test.html}'];
+     	ctx.values = { 'test.html': 'Hello world.' };
+   };
+   ```
+
+   *Note: 如果里面包含一些异步方法可以采用generator函数或async函数，即：`exports.handleRequestRules = function\* (ctx) {}` 或 `exports.handleRequestRules = async () => {}`*
+
+   在whistle的Rules配置界面上输入规则:
+
+   ```
+   whistle.script://test www.ifeng.com www.qq.com www.baidu.com echo.websocket.org
+   ```
+
+   分别访问[http://www.ifeng.com](http://www.ifeng.com)和[http://www.qq.com](http://www.qq.com)，前者可以正常访问，后者输出 `Hello world.`。
+
+   具体效果见图：[demo1]()
+
+   如果需要通过配置给脚本传递一些额外参数，可以如下配置(注意中间不能有空格):
+
+   ```
+   whistle.script://test(a,b,c) www.ifeng.com www.qq.com www.baidu.com echo.websocket.org
+   ```
+
+   可以在脚本中通过 `process.args` 获取:
+
+   ```
+   exports.handleRequestRules = (ctx) => {
+   	console.log(process.args); // output: ["a", "b", "c"]
+   	ctx.rules = ['www.qq.com file://{test.html}'];
+     	ctx.values = { 'test.html': 'Hello world.' };
+   };
+   ```
+
+2. 设置WebSocket请求的规则(需要[开启HTTPs拦截](https://avwo.github.io/whistle/webui/https.html)):
+
+   ```
+   exports.handleWebSocket = (ctx) => {
+     this.rules = '127.0.0.1 echo.websocket.org';
+   };
+   ```
+
+   接下来的操作同上。
+
+3. 设置Tunnel请求的规则(要测试可以暂时[关闭HTTPs拦截](https://avwo.github.io/whistle/webui/https.html)):
+
+   ```
+   exports.handleTunnel = (ctx) => {
+     this.rules = '127.0.0.1 www.baidu.com';
+   };
+   ```
+
+   接下来的操作同上。
 
 #　例子
 

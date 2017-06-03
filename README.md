@@ -1,5 +1,9 @@
 # whistle.script
-whistle.script为[whistle](https://github.com/avwo/whistle)的一个插件，可以在该插件的UI界面上**编写自定义脚本**操作请求响应，包括：
+whistle.script为[whistle](https://github.com/avwo/whistle)的一个扩展脚本插件，可以直接
+
+
+
+可以在该插件的UI界面上**编写自定义脚本**操作请求响应，包括：
 
 1. 设置HTTP、HTTPs、Websocket、Tunnel(Socket)请求的whistle规则
 2. 显示HTTP、HTTPs、Websocket、Tunnel(Socket)请求响应的头部、方法、状态码、内容等

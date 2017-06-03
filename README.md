@@ -18,7 +18,24 @@ whistle.script为[whistle](https://github.com/avwo/whistle)的一个扩展脚本
 
 # 安装
 
+1. 安装Node(>=6): [官网下载安装最新版本(LTS和Stable都可以)](https://nodejs.org/)
+2. 安装最新版的[whistle](https://github.com/avwo/whistle)。
 
+   ```
+ npm install -g whistle
+
+ # Mac、Linux用户可能需要加sudo
+
+ sudo npm install -g whistle
+   ```
+
+3. 安装script插件:
+
+```
+npm install -g whistle.script
+# Mac、Linux用户可能需要加sudo
+sudo npm install -g whistle.script
+```
 
 # 使用
 

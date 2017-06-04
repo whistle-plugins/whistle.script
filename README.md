@@ -44,7 +44,7 @@ sudo npm install -g whistle.script
 1. 可以通过 `Plugins->Home->script`打开或右键并选择 `在新标签页中打开` 
 2. 直接访问 [http://local.whistlejs.com/plugin.script](http://local.whistlejs.com/plugin.script/)
 
- ![whistle.script界面](https://raw.githubusercontent.com/avwo/whistleui/master/img/plugins/whistle.script/home.gif)
+ ![whistle.script界面](https://raw.githubusercontent.com/avwo/whistleui/master/img/plugins/whistle.script/index.gif)
 
 #### 设置规则
 

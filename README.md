@@ -45,65 +45,60 @@ whistle.script为[whistle](https://github.com/avwo/whistle)的一个扩展脚本
 
 1. 设置HTTP或HTTPs请求的[whistle规则](https://avwo.github.io/whistle/rules/)(操作HTTPs需要[开启HTTPs拦截](https://avwo.github.io/whistle/webui/https.html))
 
-   在界面中的`test` 脚本输入(也可以在其它编辑器编辑后再copy进来):
+	在界面中的`test` 脚本输入(也可以在其它编辑器编辑后再copy进来):
 
-   ```
-   exports.handleRequestRules = (ctx) => {
-   	// ctx.fullUrl 可以获取请求url
-   	// ctx.headers 可以获取请求头
-   	// ctx.options 里面包含一些特殊的请求头字段，分别可以获取一些额外信息，如请求方法、设置的规则等
-   	ctx.rules = ['www.qq.com file://{test.html}'];
-     	ctx.values = { 'test.html': 'Hello world.' };
-   };
-   ```
+		exports.handleRequestRules = (ctx) => {
+			// ctx.fullUrl 可以获取请求url
+			// ctx.headers 可以获取请求头
+			// ctx.options 里面包含一些特殊的请求头字段，分别可以获取一些额外信息，如请求方法、设置的规则等
+			ctx.rules = ['www.qq.com file://{test.html}'];
+		 	ctx.values = { 'test.html': 'Hello world.' };
+		};
 
-   Note: 如果里面包含一些异步方法可以采用generator函数或async函数，即：`exports.handleRequestRules = function* (ctx) {}` 或 `exports.handleRequestRules = async () => {}`
+	Note: 如果里面包含一些异步方法可以采用generator函数或async函数，即：`exports.handleRequestRules = function* (ctx) {}` 或 `exports.handleRequestRules = async () => {}`
 
-   在whistle的Rules配置界面上输入规则:
+	在whistle的Rules配置界面上输入规则:
 
-   ```
-   whistle.script://test www.ifeng.com www.qq.com www.baidu.com echo.websocket.org
-   ```
+		whistle.script://test www.ifeng.com www.qq.com www.baidu.com echo.websocket.org
 
-   分别访问[http://www.ifeng.com](http://www.ifeng.com)和[http://www.qq.com](http://www.qq.com)，前者可以正常访问，后者输出 `Hello world.`。
+	分别访问[http://www.ifeng.com](http://www.ifeng.com)和[http://www.qq.com](http://www.qq.com)，前者可以正常访问，后者输出 `Hello world.`。
 
-   具体效果见图：[demo1](https://raw.githubusercontent.com/avwo/whistleui/master/img/plugins/whistle.script/rules.gif)
+	具体效果见图：[demo1](https://raw.githubusercontent.com/avwo/whistleui/master/img/plugins/whistle.script/rules.gif)
 
-   如果需要通过配置给脚本传递一些额外参数，可以如下配置(注意中间不能有空格):
+	如果需要通过配置给脚本传递一些额外参数，可以如下配置(注意中间不能有空格):
 
-	whistle.script://test(a,b,c) www.ifeng.com www.qq.com www.baidu.com echo.websocket.org
+		whistle.script://test(a,b,c) www.ifeng.com www.qq.com www.baidu.com echo.websocket.org
 
-   可以在脚本中通过 `process.args` 获取:
+	可以在脚本中通过 `process.args` 获取:
 
-	exports.handleRequestRules = (ctx) => {
-	  console.log(process.args); // output: ["a", "b", "c"]
-	  ctx.rules = ['www.qq.com file://{test.html}'];
-	  ctx.values = { 'test.html': 'Hello world.' };
-	};
+		exports.handleRequestRules = (ctx) => {
+		  console.log(process.args); // output: ["a", "b", "c"]
+		  ctx.rules = ['www.qq.com file://{test.html}'];
+		  ctx.values = { 'test.html': 'Hello world.' };
+		};
 
 2. 设置WebSocket请求的规则(需要[开启HTTPs拦截](https://avwo.github.io/whistle/webui/https.html)):
 
-	exports.handleWebSocket = (ctx) => {
-	  // ctx.fullUrl 可以获取请求url
-	  // ctx.headers 可以获取请求头
-	  // ctx.options 里面包含一些特殊的请求头字段，分别可以获取一些额外信息，如请求方法、设置的规则等
-	  this.rules = '127.0.0.1 echo.websocket.org';
-	};
+		exports.handleWebSocket = (ctx) => {
+		  // ctx.fullUrl 可以获取请求url
+		  // ctx.headers 可以获取请求头
+		  // ctx.options 里面包含一些特殊的请求头字段，分别可以获取一些额外信息，如请求方法、设置的规则等
+		  this.rules = '127.0.0.1 echo.websocket.org';
+		};
 
-
-   接下来的操作同上。
+	接下来的操作同上。
 
 3. 设置Tunnel请求的规则(要测试可以暂时[关闭HTTPs拦截](https://avwo.github.io/whistle/webui/https.html)):
 
-	exports.handleTunnel = (ctx) => {
-	  // ctx.fullUrl 可以获取请求url
-	  // ctx.headers 可以获取请求头
-	  // ctx.options 里面包含一些特殊的请求头字段，分别可以获取一些额外信息，如请求方法、设置的规则等
-	  this.rules = '127.0.0.1 www.baidu.com';
-	};
+		exports.handleTunnel = (ctx) => {
+		  // ctx.fullUrl 可以获取请求url
+		  // ctx.headers 可以获取请求头
+		  // ctx.options 里面包含一些特殊的请求头字段，分别可以获取一些额外信息，如请求方法、设置的规则等
+		  this.rules = '127.0.0.1 www.baidu.com';
+		};
 
 
-   接下来的操作同上。
+	接下来的操作同上。
 
 #### 操作请求
 
@@ -139,18 +134,18 @@ whistle.script为[whistle](https://github.com/avwo/whistle)的一个扩展脚本
 		  // do sth
 		};
 
-   在whistle的Rules配置界面上输入规则:
+	在whistle的Rules配置界面上输入规则:
 
 		# 这里不能用whistle.script，否则请求不会转发到handleRequest
 		# whistle.script只会执行handleXxxRules
 		# 你也可以通过在handleXxxRules里面设置 script://test(a,b,c)，实现转发
 		script://test www.ifeng.com www.qq.com www.baidu.com echo.websocket.org
 
-   分别访问[http://www.ifeng.com](http://www.ifeng.com)和[http://www.qq.com](http://www.qq.com)，可以在script的界面中的Consle看到打印出来的请求的url、响应状态吗和头部。
+	分别访问[http://www.ifeng.com](http://www.ifeng.com)和[http://www.qq.com](http://www.qq.com)，可以在script的界面中的Consle看到打印出来的请求的url、响应状态吗和头部。
 
-   具体效果见图：[demo2](https://raw.githubusercontent.com/avwo/whistleui/master/img/plugins/whistle.script/request.gif)
+	具体效果见图：[demo2](https://raw.githubusercontent.com/avwo/whistleui/master/img/plugins/whistle.script/request.gif)
 
-   需要在配置中带上参数，可以参考上面的规则设置
+	需要在配置中带上参数，可以参考上面的规则设置
 
 2. 操作WebSocket请求(需要[开启HTTPs拦截](https://avwo.github.io/whistle/webui/https.html))
 
@@ -167,7 +162,7 @@ whistle.script为[whistle](https://github.com/avwo/whistle)的一个扩展脚本
 		 });
 		};
 
-   whistle规则配置同上，访问[https://www.websocket.org/echo.html](https://www.websocket.org/echo.html)，点击下面的connect按钮及send按钮，可以如下效果：[demo3](https://raw.githubusercontent.com/avwo/whistleui/master/img/plugins/whistle.script/websocket.gif)
+	whistle规则配置同上，访问[https://www.websocket.org/echo.html](https://www.websocket.org/echo.html)，点击下面的connect按钮及send按钮，可以如下效果：[demo3](https://raw.githubusercontent.com/avwo/whistleui/master/img/plugins/whistle.script/websocket.gif)
 
 3. 操作Tunnel请求
 
@@ -178,9 +173,9 @@ whistle.script为[whistle](https://github.com/avwo/whistle)的一个扩展脚本
 		 // 也可以参考上面操作WebSocket，自己监听data和write方法处理，这样就可以直接修改和打印内容
 		};
 
-   whistle规则配置同上
+	whistle规则配置同上
 
-\# License
+# License
 
 [MIT](https://github.com/whistle-plugins/whistle.script/blob/master/LICENSE)
 

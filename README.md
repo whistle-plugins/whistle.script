@@ -121,31 +121,84 @@ sudo npm install -g whistle.script
 1. 操作HTTP或HTTPs请求(操作HTTPs需要[开启HTTPs拦截](https://avwo.github.io/whistle/webui/https.html))
 
    ```
-   // 如果Node >= 7.6，可以采用async await的方式
+
    exports.handleRequest = function* (ctx, next) {
        // ctx.fullUrl 可以获取请求url
    	// ctx.headers 可以获取请求头
-   	// ctx.options 里面包含一些特殊的请求头字段，分别可以获取一些额外信息，如请求方法、设置的规则等
+   	// ctx.options 里面包含一些特殊的请求头字段，分别可以获取一些额外信息，如请设置的规则等
    	// ctx.method 获取和设置请求方法
    	// const reqBody = yield ctx.getReqBody(); 获取请求body的Buffer数据，如果没有数据返回null
-   	// const reqText = yield ctx.getReqText(); 
-   	console.log(ctx.method, ctx.headers, reqBody);
-   	const { statusCode, headers } = yield next();
-   	const resBody = yield ctx.getResBody();
-   	console.log(statusCode, headers, resBody);
+   	// const reqText = yield ctx.getReqText();  获取请求body的文本，如果没有返回''
+   	// const formData = yield ctx.getFormData(); 获取表单对象，如果不是表单，返回空对象{}
+   	// console.log(ctx.method, ctx.headers, reqBody);
+   	// ctx.req.body = String| Buffer | Stream | null，修改请求的内容
+   	// 只有执行next方法后才可以把正常的请求发送出去
+   	// 如果需要自定义请求，可以通过全局的request方法操作
+   	// console.log(request);
+   	const { ctx.fullUrl, statusCode, headers } = yield next(); 
+   	console.log(statusCode, headers);
+   	// const resBody = yield ctx.getResBody();
    	// const resText = yield ctx.getResText();
-   	// ctx.status = 404;
-   	// ctx.set(headers);
-   	// ctx.set('x-test', 'abc');
-   	// ctx.body = resText;
+   	// ctx.status = 404; 修改响应状态码
+   	// ctx.set(headers); 批量修改响应头
+   	// ctx.set('x-test', 'abc'); 修改响应头
+   	// ctx.body = String| Buffer | Stream | null; 修改响应内容
+   };
+
+   // 如果Node >= 7.6，可以采用async await的方式
+   exports.handleRequest = async (ctx, next) => {
+   	// do sth
+   	const { statusCode, headers } = await next(); 
+   	// do sth
    };
    ```
 
-   ​
+   在whistle的Rules配置界面上输入规则:
 
-#　例子
+   ```
+   # 这里不能用whistle.script，否则请求不会转发到handleRequest
+   # whistle.script只会执行handleXxxRules
+   # 你也可以通过在handleXxxRules里面设置 script://test(a,b,c)，实现转发
+   script://test www.ifeng.com www.qq.com www.baidu.com echo.websocket.org
+   ```
 
+   分别访问[http://www.ifeng.com](http://www.ifeng.com)和[http://www.qq.com](http://www.qq.com)，可以在script的界面中的Consle看到打印出来的请求的url、响应状态吗和头部。
 
+   具体效果见图：[demo2]()
+
+   需要在配置中带上参数，可以参考上面的规则设置
+
+2. 操作WebSocket请求(需要[开启HTTPs拦截](https://avwo.github.io/whistle/webui/https.html))
+
+   ```
+   // Node < 7.6可以改用genrator和yield
+   exports.handleWebSocket = async (req, connect) => {
+     const res = await connect();
+     res.on('message', (data) => {
+       console.log('Receive', data);
+       req.send(data);
+     });
+     req.on('message', (data) => {
+       console.log('Sent', data);
+       res.send(data);
+     });
+   };
+   ```
+
+   whistle规则配置同上
+
+3. 操作Tunnel请求
+
+   ```
+   // Node >= 7.6可以改用async和await
+   exports.handleTunnel = function* (req, connect) {
+     const res = yield connect();
+     req.pipe(res).pipe(req);
+     // 也可以参考上面操作WebSocket，自己监听data和write方法处理，这样就可以直接修改和打印内容
+   };
+   ```
+
+   whistle规则配置同上
 
 \# License
 

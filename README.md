@@ -44,7 +44,7 @@ sudo npm install -g whistle.script
 1. 可以通过 `Plugins->Home->script`打开或右键并选择 `在新标签页中打开` 
 2. 直接访问 [http://local.whistlejs.com/plugin.script](http://local.whistlejs.com/plugin.script/)
 
-效果见图: [whistle.script界面]()
+ ![whistle.script界面](https://raw.githubusercontent.com/avwo/whistleui/master/img/plugins/whistle.script/home.gif)
 
 #### 设置规则
 
@@ -72,7 +72,7 @@ sudo npm install -g whistle.script
 
    分别访问[http://www.ifeng.com](http://www.ifeng.com)和[http://www.qq.com](http://www.qq.com)，前者可以正常访问，后者输出 `Hello world.`。
 
-   具体效果见图：[demo1]()
+   具体效果见图：[demo1](https://raw.githubusercontent.com/avwo/whistleui/master/img/plugins/whistle.script/rules.gif)
 
    如果需要通过配置给脚本传递一些额外参数，可以如下配置(注意中间不能有空格):
 
@@ -164,7 +164,7 @@ sudo npm install -g whistle.script
 
    分别访问[http://www.ifeng.com](http://www.ifeng.com)和[http://www.qq.com](http://www.qq.com)，可以在script的界面中的Consle看到打印出来的请求的url、响应状态吗和头部。
 
-   具体效果见图：[demo2]()
+   具体效果见图：[demo2](https://raw.githubusercontent.com/avwo/whistleui/master/img/plugins/whistle.script/request.gif)
 
    需要在配置中带上参数，可以参考上面的规则设置
 
@@ -185,7 +185,7 @@ sudo npm install -g whistle.script
    };
    ```
 
-   whistle规则配置同上，访问[https://www.websocket.org/echo.html](https://www.websocket.org/echo.html)，点击下面的connect按钮及send按钮，可以如下效果：[demo3]()
+   whistle规则配置同上，访问[https://www.websocket.org/echo.html](https://www.websocket.org/echo.html)，点击下面的connect按钮及send按钮，可以如下效果：[demo3](https://raw.githubusercontent.com/avwo/whistleui/master/img/plugins/whistle.script/websocket.gif)
 
 3. 操作Tunnel请求
 

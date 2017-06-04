@@ -141,10 +141,10 @@ whistle.script为[whistle](https://github.com/avwo/whistle)的一个扩展脚本
 
    在whistle的Rules配置界面上输入规则:
 
-	# 这里不能用whistle.script，否则请求不会转发到handleRequest
-	# whistle.script只会执行handleXxxRules
-	# 你也可以通过在handleXxxRules里面设置 script://test(a,b,c)，实现转发
-	script://test www.ifeng.com www.qq.com www.baidu.com echo.websocket.org
+		# 这里不能用whistle.script，否则请求不会转发到handleRequest
+		# whistle.script只会执行handleXxxRules
+		# 你也可以通过在handleXxxRules里面设置 script://test(a,b,c)，实现转发
+		script://test www.ifeng.com www.qq.com www.baidu.com echo.websocket.org
 
    分别访问[http://www.ifeng.com](http://www.ifeng.com)和[http://www.qq.com](http://www.qq.com)，可以在script的界面中的Consle看到打印出来的请求的url、响应状态吗和头部。
 

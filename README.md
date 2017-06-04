@@ -94,7 +94,10 @@ sudo npm install -g whistle.script
 
    ```
    exports.handleWebSocket = (ctx) => {
-     this.rules = '127.0.0.1 echo.websocket.org';
+   	// ctx.fullUrl 可以获取请求url
+   	// ctx.headers 可以获取请求头
+   	// ctx.options 里面包含一些特殊的请求头字段，分别可以获取一些额外信息，如请求方法、设置的规则等
+   	this.rules = '127.0.0.1 echo.websocket.org';
    };
    ```
 
@@ -104,7 +107,10 @@ sudo npm install -g whistle.script
 
    ```
    exports.handleTunnel = (ctx) => {
-     this.rules = '127.0.0.1 www.baidu.com';
+   	// ctx.fullUrl 可以获取请求url
+   	// ctx.headers 可以获取请求头
+   	// ctx.options 里面包含一些特殊的请求头字段，分别可以获取一些额外信息，如请求方法、设置的规则等
+   	this.rules = '127.0.0.1 www.baidu.com';
    };
    ```
 
@@ -115,16 +121,23 @@ sudo npm install -g whistle.script
 1. 操作HTTP或HTTPs请求(操作HTTPs需要[开启HTTPs拦截](https://avwo.github.io/whistle/webui/https.html))
 
    ```
+   // 如果Node >= 7.6，可以采用async await的方式
    exports.handleRequest = function* (ctx, next) {
        // ctx.fullUrl 可以获取请求url
    	// ctx.headers 可以获取请求头
    	// ctx.options 里面包含一些特殊的请求头字段，分别可以获取一些额外信息，如请求方法、设置的规则等
    	// ctx.method 获取和设置请求方法
-   	const reqBody = yield ctx.getReqBody();
+   	// const reqBody = yield ctx.getReqBody(); 获取请求body的Buffer数据，如果没有数据返回null
+   	// const reqText = yield ctx.getReqText(); 
    	console.log(ctx.method, ctx.headers, reqBody);
    	const { statusCode, headers } = yield next();
    	const resBody = yield ctx.getResBody();
    	console.log(statusCode, headers, resBody);
+   	// const resText = yield ctx.getResText();
+   	// ctx.status = 404;
+   	// ctx.set(headers);
+   	// ctx.set('x-test', 'abc');
+   	// ctx.body = resText;
    };
    ```
 

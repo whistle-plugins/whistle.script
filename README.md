@@ -175,17 +175,17 @@ sudo npm install -g whistle.script
    exports.handleWebSocket = async (req, connect) => {
      const res = await connect();
      res.on('message', (data) => {
-       console.log('Receive', data);
+       console.log('Received: ', data);
        req.send(data);
      });
      req.on('message', (data) => {
-       console.log('Sent', data);
+       console.log('Sent: ', data);
        res.send(data);
      });
    };
    ```
 
-   whistle规则配置同上
+   whistle规则配置同上，访问[https://www.websocket.org/echo.html](https://www.websocket.org/echo.html)，点击下面的connect按钮及send按钮，可以如下效果：[demo3]()
 
 3. 操作Tunnel请求
 
@@ -202,7 +202,7 @@ sudo npm install -g whistle.script
 
 \# License
 
-[MIT](https://github.com/whistle-plugins/whistle.rules/blob/master/LICENSE)
+[MIT](https://github.com/whistle-plugins/whistle.script/blob/master/LICENSE)
 
 
 

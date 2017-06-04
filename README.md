@@ -62,7 +62,7 @@ sudo npm install -g whistle.script
    };
    ```
 
-   *Note: 如果里面包含一些异步方法可以采用generator函数或async函数，即：`exports.handleRequestRules = function\* (ctx) {}` 或 `exports.handleRequestRules = async () => {}`*
+   Note: 如果里面包含一些异步方法可以采用generator函数或async函数，即：`exports.handleRequestRules = function* (ctx) {}` 或 `exports.handleRequestRules = async () => {}`
 
    在whistle的Rules配置界面上输入规则:
 
@@ -135,8 +135,8 @@ sudo npm install -g whistle.script
    	// 只有执行next方法后才可以把正常的请求发送出去
    	// 如果需要自定义请求，可以通过全局的request方法操作
    	// console.log(request);
-   	const { ctx.fullUrl, statusCode, headers } = yield next(); 
-   	console.log(statusCode, headers);
+   	const { statusCode, headers } = yield next(); 
+   	console.log(ctx.fullUrl, statusCode, headers);
    	// const resBody = yield ctx.getResBody();
    	// const resText = yield ctx.getResText();
    	// ctx.status = 404; 修改响应状态码

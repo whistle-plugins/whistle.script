@@ -78,28 +78,26 @@ module.exports = React.createClass({
   clear: function() {
     this.setState({ list: [] });
   },
-  onFilterChange: function(val) {
-    val = val.trim();
-    var list = this.state.list;
-    if (!list.length) {
-      return;
-    }
-    // 支持正则及多个关键字
-    if (val) {
-      list.forEach(function(log) {
-        log.hide = log.msg.indexOf(val) === -1;
-      });
-    } else {
-      list.forEach(function(log) {
-        log.hide = false;
-      });
-    }
-    this.setState({ list: list });
+  onFilterChange: function(filterText) {
+    this.setState({
+      filterText: filterText.trim()
+    });
   },
   render: function() {
     var hide =  this.props.hide ? ' hide' : '';
     var list = this.state.list;
-
+    var filterText = this.state.filterText;
+    if (list.length) {
+      if (filterText) {
+        list.forEach(function(log) {
+          log.hide = log.msg.indexOf(filterText) === -1;
+        });
+      } else {
+        list.forEach(function(log) {
+          log.hide = false;
+        });
+      }
+    }
     return (
       <div className={'fill orient-vertical-box' + hide}>
         <div ref="console" className="fill w-console-con" onScroll={this.onScroll}>

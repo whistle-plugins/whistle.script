@@ -79,7 +79,7 @@ whistle.script为[whistle](https://github.com/avwo/whistle)的一个扩展脚本
 
 2. 设置WebSocket请求的规则(需要[开启HTTPs拦截](https://avwo.github.io/whistle/webui/https.html)):
 
-		exports.handleWebSocket = (ctx) => {
+		exports.handleWebSocketRules = (ctx) => {
 		  // ctx.fullUrl 可以获取请求url
 		  // ctx.headers 可以获取请求头
 		  // ctx.options 里面包含一些特殊的请求头字段，分别可以获取一些额外信息，如请求方法、设置的规则等

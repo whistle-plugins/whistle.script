@@ -111,7 +111,7 @@ whistle.script为[whistle](https://github.com/avwo/whistle)的一个扩展脚本
 		  // ctx.method 获取和设置请求方法
 		  // const reqBody = yield ctx.getReqBody(); 获取请求body的Buffer数据，如果没有数据返回null
 		  // const reqText = yield ctx.getReqText();  获取请求body的文本，如果没有返回''
-		  // const formData = yield ctx.getFormData(); 获取表单对象，如果不是表单，返回空对象{}
+		  // const formData = yield ctx.getReqForm(); 获取表单对象，如果不是表单，返回空对象{}
 		  // console.log(ctx.method, ctx.headers, reqBody);
 		  // ctx.req.body = String| Buffer | Stream | null，修改请求的内容
 		  // 只有执行next方法后才可以把正常的请求发送出去

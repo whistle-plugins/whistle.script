@@ -52,12 +52,12 @@
 	var React = __webpack_require__(19);
 	var ReactDOM = __webpack_require__(49);
 	var List = __webpack_require__(187);
-	var Console = __webpack_require__(238);
-	var ListModal = __webpack_require__(243);
-	var MenuItem = __webpack_require__(244);
-	var EditorSettings = __webpack_require__(247);
+	var Console = __webpack_require__(243);
+	var ListModal = __webpack_require__(248);
+	var MenuItem = __webpack_require__(249);
+	var EditorSettings = __webpack_require__(252);
 	var util = __webpack_require__(190);
-	var dataCenter = __webpack_require__(241);
+	var dataCenter = __webpack_require__(246);
 
 	var Index = React.createClass({
 	  displayName: 'Index',
@@ -33563,7 +33563,7 @@
 	var ReactDOM = __webpack_require__(49);
 	var Divider = __webpack_require__(191);
 	var Editor = __webpack_require__(194);
-	var FilterInput = __webpack_require__(235);
+	var FilterInput = __webpack_require__(240);
 
 	var List = React.createClass({
 		displayName: 'List',
@@ -34008,18 +34008,14 @@
 	var themes = ['default', 'neat', 'elegant', 'erlang-dark', 'night', 'monokai', 'cobalt', 'eclipse', 'rubyblue', 'lesser-dark', 'xq-dark', 'xq-light', 'ambiance', 'blackboard', 'vibrant-ink', 'solarized dark', 'solarized light', 'twilight', 'midnight'];
 	var DEFAULT_THEME = 'cobalt';
 	var DEFAULT_FONT_SIZE = '16px';
+	var JS_COMMENT_RE = /^(\s*)\/\/+\s?/;
+	var NO_SPACE_RE = /[^\s]/;
 
 	var Editor = React.createClass({
 		displayName: 'Editor',
 
 		getThemes: function () {
 			return themes;
-		},
-		setMode: function (moe) {
-			this._mode = 'javascript';
-			if (this._editor) {
-				this._editor.setOption('mode', 'javascript');
-			}
 		},
 		setValue: function (value) {
 			value = this._value = value == null ? '' : value + '';
@@ -34083,9 +34079,91 @@
 					editor.setSize(null, height);
 				}
 			}
+			$(elem).on('keydown', function (e) {
+				if (!(e.ctrlKey || e.metaKey) || e.keyCode != 191) {
+					return;
+				}
+
+				var list = editor.listSelections();
+				if (!list || !list.length) {
+					return;
+				}
+				var isShiftKey = e.shiftKey;
+				var isEmpty;
+				var ranges = [];
+				list.forEach(function (range) {
+					var anchor = range.anchor;
+					var head = range.head;
+					var lines = [];
+					var hasComment, hasRule, revert;
+
+					if (anchor.line > head.line) {
+						revert = anchor;
+						anchor = head;
+						head = revert;
+					}
+
+					for (var i = anchor.line; i <= head.line; i++) {
+						var line = editor.getLine(i);
+						if (JS_COMMENT_RE.test(line)) {
+							hasComment = true;
+						} else if (NO_SPACE_RE.test(line)) {
+							hasRule = true;
+						}
+						lines.push(line);
+					}
+
+					if (isEmpty = !hasComment && !hasRule) {
+						return;
+					}
+					var lastIndex, firstLine, lastLine;
+					if (hasRule) {
+						lastIndex = lines.length - 1;
+						firstLine = lines[0];
+						lastLine = lines[lastIndex];
+						lines = lines.map(function (line) {
+							if (!NO_SPACE_RE.test(line)) {
+								return line;
+							}
+							if (isShiftKey && JS_COMMENT_RE.test(line)) {
+								return line.replace(JS_COMMENT_RE, '$1');
+							}
+							return '// ' + line;
+						});
+					} else {
+						firstLine = lines[0];
+						lastIndex = lines.length - 1;
+						lastLine = lines[lastIndex];
+						lines = lines.map(function (line) {
+							return line.replace(JS_COMMENT_RE, '$1');
+						});
+					}
+					if (anchor.ch != 0) {
+						anchor.ch += lines[0].length - firstLine.length;
+						if (anchor.ch < 0) {
+							anchor.ch = 0;
+						}
+					}
+					if (head.ch != 0 && head != anchor) {
+						head.ch += lines[lastIndex].length - lastLine.length;
+						if (head.ch < 0) {
+							head.ch = 0;
+						}
+					}
+					if (revert) {
+						editor.replaceRange(lines.join('\n') + '\n', { line: head.line + 1, ch: 0 }, { line: anchor.line, ch: 0 });
+						ranges.push({ anchor: head, head: anchor });
+					} else {
+						editor.replaceRange(lines.join('\n') + '\n', { line: anchor.line, ch: 0 }, { line: head.line + 1, ch: 0 });
+						ranges.push({ anchor: anchor, head: head });
+					}
+				});
+				if (!isEmpty) {
+					editor.setSelections(ranges);
+				}
+			});
 		},
 		_init: function () {
-			this.setMode();
 			this.setValue(this.props.value);
 			this.setTheme(this.props.theme);
 			this.setFontSize(this.props.fontSize);
@@ -34097,7 +34175,6 @@
 			this._init();
 		},
 		render: function () {
-
 			return React.createElement('div', { tabIndex: '0', ref: 'editor', className: 'fill orient-vertical-box w-list-content' });
 		}
 	});
@@ -45053,11 +45130,16 @@
 
 
 /***/ }),
-/* 235 */
+/* 235 */,
+/* 236 */,
+/* 237 */,
+/* 238 */,
+/* 239 */,
+/* 240 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	__webpack_require__(1);
-	__webpack_require__(236);
+	__webpack_require__(241);
 	var $ = __webpack_require__(17);
 	var util = __webpack_require__(190);
 	var React = __webpack_require__(19);
@@ -45111,13 +45193,13 @@
 	module.exports = FilterInput;
 
 /***/ }),
-/* 236 */
+/* 241 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(237);
+	var content = __webpack_require__(242);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(10)(content, {});
@@ -45137,7 +45219,7 @@
 	}
 
 /***/ }),
-/* 237 */
+/* 242 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(4)();
@@ -45151,15 +45233,15 @@
 
 
 /***/ }),
-/* 238 */
+/* 243 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	__webpack_require__(239);
+	__webpack_require__(244);
 	var React = __webpack_require__(19);
 	var ReactDOM = __webpack_require__(49);
 	var util = __webpack_require__(190);
-	var FilterInput = __webpack_require__(235);
-	var dataCenter = __webpack_require__(241);
+	var FilterInput = __webpack_require__(240);
+	var dataCenter = __webpack_require__(246);
 
 	var LEVELS = ['fatal', 'error', 'warn', 'info', 'debug', 'trace'];
 	var MAX_COUNT = 360;
@@ -45285,13 +45367,13 @@
 	});
 
 /***/ }),
-/* 239 */
+/* 244 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(240);
+	var content = __webpack_require__(245);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(10)(content, {});
@@ -45311,7 +45393,7 @@
 	}
 
 /***/ }),
-/* 240 */
+/* 245 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(4)();
@@ -45325,11 +45407,11 @@
 
 
 /***/ }),
-/* 241 */
+/* 246 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var $ = __webpack_require__(17);
-	var createCgi = __webpack_require__(242);
+	var createCgi = __webpack_require__(247);
 	var TIMEOUT = 10000;
 	var DEFAULT_CONF = { timeout: TIMEOUT };
 	var POST_CONF = $.extend({ type: 'post' }, DEFAULT_CONF);
@@ -45350,7 +45432,7 @@
 	}, POST_CONF));
 
 /***/ }),
-/* 242 */
+/* 247 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var $ = __webpack_require__(17);
@@ -45418,7 +45500,7 @@
 	module.exports = create;
 
 /***/ }),
-/* 243 */
+/* 248 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var $ = __webpack_require__(17);
@@ -45678,11 +45760,11 @@
 	module.exports = ListModal;
 
 /***/ }),
-/* 244 */
+/* 249 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	__webpack_require__(1);
-	__webpack_require__(245);
+	__webpack_require__(250);
 	var React = __webpack_require__(19);
 	var util = __webpack_require__(190);
 
@@ -45734,13 +45816,13 @@
 	module.exports = MenuItem;
 
 /***/ }),
-/* 245 */
+/* 250 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(246);
+	var content = __webpack_require__(251);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(10)(content, {});
@@ -45760,7 +45842,7 @@
 	}
 
 /***/ }),
-/* 246 */
+/* 251 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(4)();
@@ -45774,11 +45856,11 @@
 
 
 /***/ }),
-/* 247 */
+/* 252 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	__webpack_require__(1);
-	__webpack_require__(248);
+	__webpack_require__(253);
 	var React = __webpack_require__(19);
 
 	var EditorSettings = React.createClass({
@@ -46001,13 +46083,13 @@
 	module.exports = EditorSettings;
 
 /***/ }),
-/* 248 */
+/* 253 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(249);
+	var content = __webpack_require__(254);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(10)(content, {});
@@ -46027,7 +46109,7 @@
 	}
 
 /***/ }),
-/* 249 */
+/* 254 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(4)();

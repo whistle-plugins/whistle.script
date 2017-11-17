@@ -52,12 +52,36 @@
 	var React = __webpack_require__(19);
 	var ReactDOM = __webpack_require__(49);
 	var List = __webpack_require__(187);
-	var Console = __webpack_require__(243);
-	var ListModal = __webpack_require__(248);
-	var MenuItem = __webpack_require__(249);
-	var EditorSettings = __webpack_require__(252);
+	var Console = __webpack_require__(238);
+	var ListModal = __webpack_require__(243);
+	var MenuItem = __webpack_require__(244);
+	var EditorSettings = __webpack_require__(247);
 	var util = __webpack_require__(190);
-	var dataCenter = __webpack_require__(246);
+	var dataCenter = __webpack_require__(241);
+
+	var slice = [].slice;
+	var dataSource = {};
+	var emit = function () {
+	  var args = slice.apply(arguments);
+	  var type = args.shift();
+	  if (!type || typeof type !== 'string' || !args.length) {
+	    return;
+	  }
+	  dataCenter.emitData({
+	    type: type,
+	    args: JSON.stringify(args)
+	  }, function (data) {
+	    if (!data || data.ec !== 0) {
+	      return console.error('Error: Please try again.');
+	    }
+	  });
+	};
+	var setupDataSource = function () {
+	  dataSource.emit = emit;
+	  window.dataSource = dataSource;
+	};
+	setupDataSource();
+	setInterval(setupDataSource, 3000);
 
 	var Index = React.createClass({
 	  displayName: 'Index',
@@ -33563,7 +33587,7 @@
 	var ReactDOM = __webpack_require__(49);
 	var Divider = __webpack_require__(191);
 	var Editor = __webpack_require__(194);
-	var FilterInput = __webpack_require__(240);
+	var FilterInput = __webpack_require__(235);
 
 	var List = React.createClass({
 		displayName: 'List',
@@ -45130,16 +45154,11 @@
 
 
 /***/ }),
-/* 235 */,
-/* 236 */,
-/* 237 */,
-/* 238 */,
-/* 239 */,
-/* 240 */
+/* 235 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	__webpack_require__(1);
-	__webpack_require__(241);
+	__webpack_require__(236);
 	var $ = __webpack_require__(17);
 	var util = __webpack_require__(190);
 	var React = __webpack_require__(19);
@@ -45193,13 +45212,13 @@
 	module.exports = FilterInput;
 
 /***/ }),
-/* 241 */
+/* 236 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(242);
+	var content = __webpack_require__(237);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(10)(content, {});
@@ -45219,7 +45238,7 @@
 	}
 
 /***/ }),
-/* 242 */
+/* 237 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(4)();
@@ -45233,15 +45252,15 @@
 
 
 /***/ }),
-/* 243 */
+/* 238 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	__webpack_require__(244);
+	__webpack_require__(239);
 	var React = __webpack_require__(19);
 	var ReactDOM = __webpack_require__(49);
 	var util = __webpack_require__(190);
-	var FilterInput = __webpack_require__(240);
-	var dataCenter = __webpack_require__(246);
+	var FilterInput = __webpack_require__(235);
+	var dataCenter = __webpack_require__(241);
 
 	var LEVELS = ['fatal', 'error', 'warn', 'info', 'debug', 'trace'];
 	var MAX_COUNT = 360;
@@ -45367,13 +45386,13 @@
 	});
 
 /***/ }),
-/* 244 */
+/* 239 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(245);
+	var content = __webpack_require__(240);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(10)(content, {});
@@ -45393,7 +45412,7 @@
 	}
 
 /***/ }),
-/* 245 */
+/* 240 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(4)();
@@ -45407,11 +45426,11 @@
 
 
 /***/ }),
-/* 246 */
+/* 241 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var $ = __webpack_require__(17);
-	var createCgi = __webpack_require__(247);
+	var createCgi = __webpack_require__(242);
 	var TIMEOUT = 10000;
 	var DEFAULT_CONF = { timeout: TIMEOUT };
 	var POST_CONF = $.extend({ type: 'post' }, DEFAULT_CONF);
@@ -45425,6 +45444,7 @@
 	  remove: 'cgi-bin/delete',
 	  create: 'cgi-bin/create',
 	  rename: 'cgi-bin/rename',
+	  emitData: 'cgi-bin/emitData',
 	  setTheme: 'cgi-bin/setTheme',
 	  setFontSize: 'cgi-bin/setFontSize',
 	  showLineNumbers: 'cgi-bin/showLineNumbers',
@@ -45432,7 +45452,7 @@
 	}, POST_CONF));
 
 /***/ }),
-/* 247 */
+/* 242 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var $ = __webpack_require__(17);
@@ -45500,7 +45520,7 @@
 	module.exports = create;
 
 /***/ }),
-/* 248 */
+/* 243 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var $ = __webpack_require__(17);
@@ -45760,11 +45780,11 @@
 	module.exports = ListModal;
 
 /***/ }),
-/* 249 */
+/* 244 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	__webpack_require__(1);
-	__webpack_require__(250);
+	__webpack_require__(245);
 	var React = __webpack_require__(19);
 	var util = __webpack_require__(190);
 
@@ -45816,13 +45836,13 @@
 	module.exports = MenuItem;
 
 /***/ }),
-/* 250 */
+/* 245 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(251);
+	var content = __webpack_require__(246);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(10)(content, {});
@@ -45842,7 +45862,7 @@
 	}
 
 /***/ }),
-/* 251 */
+/* 246 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(4)();
@@ -45856,11 +45876,11 @@
 
 
 /***/ }),
-/* 252 */
+/* 247 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	__webpack_require__(1);
-	__webpack_require__(253);
+	__webpack_require__(248);
 	var React = __webpack_require__(19);
 
 	var EditorSettings = React.createClass({
@@ -46083,13 +46103,13 @@
 	module.exports = EditorSettings;
 
 /***/ }),
-/* 253 */
+/* 248 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(254);
+	var content = __webpack_require__(249);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(10)(content, {});
@@ -46109,7 +46129,7 @@
 	}
 
 /***/ }),
-/* 254 */
+/* 249 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(4)();

@@ -13,6 +13,30 @@ var EditorSettings = require('./editor-settings');
 var util = require('./util');
 var dataCenter = require('./data-center');
 
+var slice = [].slice;
+var dataSource = {};
+var emit = function() {
+  var args = slice.apply(arguments);
+  var type = args.shift();
+  if (!type || typeof type !== 'string' || !args.length) {
+    return;
+  }
+  dataCenter.emitData({
+    type: type,
+    args: JSON.stringify(args)
+  }, function(data) {
+    if (!data || data.ec !== 0) {
+      return console.error('Error: Please try again.');
+    }
+  });
+};
+var setupDataSource = function() {
+  dataSource.emit = emit;
+  window.dataSource = dataSource;
+};
+setupDataSource();
+setInterval(setupDataSource, 3000);
+
 var Index = React.createClass({
   getInitialState: function() {
     var data = this.props.data;

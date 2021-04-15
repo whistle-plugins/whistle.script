@@ -27,7 +27,6 @@ coverage
 build/Release
 
 # Dependency directories
-node_modules
 jspm_packages
 
 # Optional npm cache directory
@@ -35,14 +34,11 @@ jspm_packages
 
 # Optional REPL history
 .node_repl_history
-
-# test
-/test
-
-# source
+.idea／
+/node_modules/
+.DS_Store
+.idea
+/.*
 /src
-
-# others
-.babelrc
-.gitignore
-.travis.yml
+/test
+/.history

@@ -1,1 +1,20 @@
-module.exports = require('./lib');
+
+exports.uiServer = require('./lib/uiServer');
+exports.rulesServer = require('./lib/rulesServer');
+exports.tunnelRulesServer = require('./lib/tunnelRulesServer');
+exports.resRulesServer = require('./lib/resRulesServer');
+exports.statsServer = require('./lib/statsServer');
+exports.resStatsServer = require('./lib/resStatsServer');
+exports.server = require('./lib/server');
+exports.reqRead = require('./lib/reqRead');
+exports.reqWrite = require('./lib/reqWrite');
+exports.resRead = require('./lib/resRead');
+exports.resWrite = require('./lib/resWrite');
+exports.wsReqRead = require('./lib/wsReqRead');
+exports.wsReqWrite = require('./lib/wsReqWrite');
+exports.wsResRead = require('./lib/wsResRead');
+exports.wsResWrite = require('./lib/wsResWrite');
+exports.tunnelReqRead = require('./lib/tunnelReqRead');
+exports.tunnelReqWrite = require('./lib/tunnelReqWrite');
+exports.tunnelResRead = require('./lib/tunnelResRead');
+exports.tunnelResWrite = require('./lib/tunnelResWrite');

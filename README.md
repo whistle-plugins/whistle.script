@@ -1,17 +1,5 @@
-1. 文档：
-    - 官网
-    - 文档
-    - 博客
-2. 生态：
-    - 客户端（Mac、Win）
-    - 插件（whistle.script(试试：线程 worker)、whistle.nohost-gateway、whistle.vase)
-3. 功能：
-    - Network: Group Similar
-    - Rules & Value: 分组
+# whistle.script
 
-
-
-whistle.script：
 1. 获取钩子方法：
     ``` js
     const getHandlers = async (name) => {

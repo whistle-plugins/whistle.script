@@ -39,7 +39,7 @@ whistle.script为[whistle](https://github.com/avwo/whistle)的一个扩展脚本
 1. 可以通过 `Plugins->Home->script`打开或右键并选择 `在新标签页中打开` 
 2. 直接访问 [http://local.whistlejs.com/plugin.script](http://local.whistlejs.com/plugin.script/)
 
- ![whistle.script界面](https://raw.githubusercontent.com/avwo/whistleui/master/img/plugins/whistle.script/index.gif)
+ ![whistle.script界面](https://user-images.githubusercontent.com/11450939/126302159-0c533ea7-3bc0-484a-bd30-698d5a7881df.gif)
 
 #### 设置规则
 
@@ -63,7 +63,7 @@ whistle.script为[whistle](https://github.com/avwo/whistle)的一个扩展脚本
 	
 	分别访问[http://www.ifeng.com](http://www.ifeng.com)和[http://www.qq.com](http://www.qq.com)，前者可以正常访问，后者输出 `Hello world.`。
 	
-	具体效果见图：[demo1](https://raw.githubusercontent.com/avwo/whistleui/master/img/plugins/whistle.script/rules.gif)
+	具体效果见图：[demo1](https://user-images.githubusercontent.com/11450939/126302225-2598772c-d6a3-45e3-97d6-685fbed1ba37.gif)
 	
 	如果需要通过配置给脚本传递一些额外参数，可以如下配置(注意中间不能有空格):
 	
@@ -145,7 +145,7 @@ whistle.script为[whistle](https://github.com/avwo/whistle)的一个扩展脚本
 	
 	分别访问[http://www.ifeng.com](http://www.ifeng.com)和[http://www.qq.com](http://www.qq.com)，可以在script的界面中的Consle看到打印出来的请求的url、响应状态吗和头部。
 	
-	具体效果见图：[demo2](https://raw.githubusercontent.com/avwo/whistleui/master/img/plugins/whistle.script/request.gif)
+	具体效果见图：[demo2](https://user-images.githubusercontent.com/11450939/126302210-e3aa0b56-9001-4e03-83c8-8986d8f544ff.gif)
 	
 	需要在配置中带上参数，可以参考上面的规则设置
 
@@ -165,7 +165,7 @@ whistle.script为[whistle](https://github.com/avwo/whistle)的一个扩展脚本
 		 });
 		};
 
-	whistle规则配置同上，访问[https://www.websocket.org/echo.html](https://www.websocket.org/echo.html)，点击下面的connect按钮及send按钮，可以如下效果：[demo3](https://raw.githubusercontent.com/avwo/whistleui/master/img/plugins/whistle.script/websocket.gif)
+	whistle规则配置同上，访问[https://www.websocket.org/echo.html](https://www.websocket.org/echo.html)，点击下面的connect按钮及send按钮，可以如下效果：[demo3](https://user-images.githubusercontent.com/11450939/126302243-26c8b4af-851c-4b00-87b9-3286e9e67251.gif)
 
 3. 操作Tunnel请求
 

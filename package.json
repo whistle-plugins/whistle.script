@@ -46,7 +46,7 @@
   },
   "dependencies": {
     "co": "^4.6.0",
-    "iconv-lite": "^0.4.15",
+    "iconv-lite": "^0.4.24",
     "koa": "^1.4.0",
     "koa-bodyparser": "^2.5.0",
     "koa-onerror": "^3.1.0",

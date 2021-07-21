@@ -116,7 +116,7 @@ whistle.script为[whistle](https://github.com/avwo/whistle)的一个扩展脚本
 		  // ctx.req.body = String| Buffer | Stream | null，修改请求的内容
 		  // 只有执行next方法后才可以把正常的请求发送出去
 		  // 如果需要自定义请求，可以通过全局的request方法操作
-		  // console.log(request);
+		  // console.log(request); // TODO 
 		  // next方法可以设置next({ host, port });
 		  const { statusCode, headers } = yield next(); 
 		  console.log(ctx.fullUrl, statusCode, headers);

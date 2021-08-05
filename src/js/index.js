@@ -8,7 +8,6 @@ var ReactDOM = require('react-dom');
 var List = require('./list');
 var Console = require('./console');
 var ListModal = require('./list-modal');
-var MenuItem = require('./menu-item');
 var EditorSettings = require('./editor-settings');
 var util = require('./util');
 var dataCenter = require('./data-center');
@@ -46,9 +45,10 @@ var Index = React.createClass({
       data: {},
     };
     var hasActive;
+    var activeName = storage.get('activeName');
     data.list.forEach(function(item) {
       modal.list.push(item.name);
-      var active = item.name == data.activeName;
+      var active = item.name == activeName;
       if (active) {
         hasActive = true;
       }
@@ -71,7 +71,7 @@ var Index = React.createClass({
     };
   },
   active: function(options) {
-    dataCenter.setActive({name: options.name});
+    storage.set('activeName', options.name);
     this.setState({});
   },
   checkName: function(name) {
@@ -117,7 +117,6 @@ var Index = React.createClass({
   setValue: function(item) {
     var self = this;
     if (!item.changed) {
-      self.showEditDialog();
       return;
     }
     var modal = self.state.modal;
@@ -135,9 +134,6 @@ var Index = React.createClass({
     this.state.modal
         .getChangedList()
           .forEach(this.setValue);
-  },
-  showEditDialog: function() {
-    var activeItem = this.state.modal.getActive();
   },
   rename: function(e) {
     if (!this.isSubmit(e)) {

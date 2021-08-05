@@ -24,7 +24,7 @@ var List = React.createClass({
 			self.onDoubleClick(item);
 		}
 		var modal = self.props.modal;
-		var listCon = $(ReactDOM.findDOMNode(self.refs.list)).focus().on('keydown', function(e) {
+		$(ReactDOM.findDOMNode(self.refs.list)).focus().on('keydown', function(e) {
 			var item;
 			if (e.keyCode == 38) { //up
 				item = modal.prev();
@@ -53,11 +53,10 @@ var List = React.createClass({
 		}
 	},
 	onClick: function(item) {
-		var self = this;
-		if (typeof self.props.onActive != 'function' ||
-				self.props.onActive(item) !== false) {
-			self.props.modal.setActive(item.name);
-			self.setState({activeItem: item});
+		var onActive = this.props.onActive;
+		if (typeof onActive != 'function' || onActive(item) !== false) {
+			this.props.modal.setActive(item.name);
+			this.setState({activeItem: item});
 		}
 	},
 	onDoubleClick: function(item, okIcon) {

@@ -9,7 +9,6 @@ module.exports = $.extend(createCgi({
   init: 'cgi-bin/init',
   getLogs: 'cgi-bin/log',
 }, GET_CONF), createCgi({
-  setActive: 'cgi-bin/active',
   remove: 'cgi-bin/delete',
   create: 'cgi-bin/create',
   rename: 'cgi-bin/rename',

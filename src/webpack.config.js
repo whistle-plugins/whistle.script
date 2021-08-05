@@ -9,17 +9,21 @@ module.exports = {
     filename: '[name].js',
   },
   module: {
-    loaders: [{
-      test: /\.js$/,
-      exclude: /node_modules/,
-      loader: 'babel-loader',
-    }, {
-      test: /\.css$/,
-      loader: 'style-loader!css-loader',
-    }, {
-      test: /\.(png|woff|woff2|eot|ttf|svg)$/,
-      loader: 'url-loader?limit=1000000',
-    }],
+    loaders: [
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        loader: 'babel-loader',
+      },
+      {
+        test: /\.css$/,
+        loader: 'style-loader!css-loader',
+      },
+      {
+        test: /\.(png|woff|woff2|eot|ttf|svg)$/,
+        loader: 'url-loader?limit=1000000',
+      }
+    ],
   },
   plugins: [
     new webpack.DefinePlugin({

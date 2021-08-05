@@ -12,6 +12,7 @@ var MenuItem = require('./menu-item');
 var EditorSettings = require('./editor-settings');
 var util = require('./util');
 var dataCenter = require('./data-center');
+var storage = require('./storage');
 
 var slice = [].slice;
 var dataSource = {};
@@ -64,9 +65,9 @@ var Index = React.createClass({
 
     return {
       modal: new ListModal(modal.list, modal.data),
-      theme: data.theme,
-      fontSize: data.fontSize,
-      showLineNumbers: data.showLineNumbers
+      theme: storage.get('theme'),
+      fontSize: storage.get('fontSize'),
+      showLineNumbers: storage.get('showLineNumbers')
     };
   },
   active: function(options) {
@@ -214,24 +215,18 @@ var Index = React.createClass({
   },
   onThemeChange: function(e) {
     var theme = e.target.value;
-    dataCenter.setTheme({theme: theme});
-    this.setState({
-      theme: theme
-    });
+    storage.set('theme', theme);
+    this.setState({ theme: theme });
   },
   onFontSizeChange: function(e) {
     var fontSize = e.target.value;
-    dataCenter.setFontSize({fontSize: fontSize});
-    this.setState({
-      fontSize: fontSize
-    });
+    storage.set('fontSize', fontSize);
+    this.setState({ fontSize: fontSize });
   },
   onLineNumberChange: function(e) {
     var showLineNumbers = e.target.checked;
-    dataCenter.showLineNumbers({showLineNumbers: showLineNumbers ? 1 : 0});
-    this.setState({
-      showLineNumbers: showLineNumbers
-    });
+    storage.set('showLineNumbers', showLineNumbers ? 1 : '');
+    this.setState({ showLineNumbers: showLineNumbers });
   },
   showCreateInput: function() {
     var input = ReactDOM.findDOMNode(this.refs.createInput);
@@ -279,7 +274,6 @@ var Index = React.createClass({
     var theme = state.theme || 'cobalt';
     var fontSize = state.fontSize || '14px';
     var showLineNumbers = state.showLineNumbers || false;
-    var activeItem = this.state.modal.getActive();
     var isConsole = state.activeTabName === 'console';
 
     return (<div className="container orient-vertical-box">

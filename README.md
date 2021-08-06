@@ -192,10 +192,8 @@ exports.handleWebSocket = async (ctx, connect) => {
 3. 操作Tunnel请求
 
 		exports.handleTunnel = async (req, connect) => {
-		 // connect方法可以设置connect({ host, port });
-		 const res = await connect();
-		 req.pipe(res).pipe(req);
-		 // 也可以参考上面操作WebSocket，自己监听data和write方法处理，这样就可以直接修改和打印内容
+		  const res = await connect();
+		  req.pipe(res).pipe(req);
 		};
 
 	whistle规则配置同上

@@ -147,13 +147,21 @@ exports.handleWebSocket = async (ctx, connect) => {
   const { socket } = ctx;
   // 与服务器建立连接
   const svrSocket = await connect();
-  // 客户端 pong 服务pong 端
+  // 客户端 pong 服务端
   socket.on('pong', (data) => {
   	svrSocket.pong(data);
+  });
+  // 客户端 ping 服务pong 端
+  socket.on('ping', (data) => {
+  	svrSocket.ping(data);
   });
   // 服务端 ping 客户端
   svrSocket.on('ping', (data) => {
   	socket.ping(data);
+  });
+  // 服务端 pong 客户端
+  svrSocket.on('pong', (data) => {
+  	socket.pong(data);
   });
   // 正常断开 WebSocket 连接
   socket.on('disconnect', (code, message, opts) => {
@@ -176,6 +184,7 @@ exports.handleWebSocket = async (ctx, connect) => {
     socket.send(data, opts);
   });
 };
+
 ```
 
 	whistle规则配置同上，访问[https://www.websocket.org/echo.html](https://www.websocket.org/echo.html)，点击下面的connect按钮及send按钮，可以如下效果：[demo3](https://user-images.githubusercontent.com/11450939/126302243-26c8b4af-851c-4b00-87b9-3286e9e67251.gif)

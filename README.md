@@ -103,101 +103,89 @@ whistle.script为[whistle](https://github.com/avwo/whistle)的一个扩展脚本
 #### 操作请求
 
 1. 操作HTTP或HTTPs请求(操作HTTPs需要[开启HTTPs拦截](https://avwo.github.io/whistle/webui/https.html))
-
-		exports.handleRequest = async (ctx, next) => {
-		  // ctx.fullUrl 可以获取请求url
-		  // ctx.headers 可以获取请求头
-		  // ctx.options 里面包含一些特殊的请求头字段，分别可以获取一些额外信息，如请设置的规则等
-		  // ctx.method 获取和设置请求方法
-		  // const reqBody = await ctx.getReqBody(); 获取请求body的Buffer数据，如果没有数据返回null
-		  // const reqText = await ctx.getReqText();  获取请求body的文本，如果没有返回''
-		  // const formData = await ctx.getReqForm(); 获取表单对象，如果不是表单，返回空对象{}
-		  // console.log(ctx.method, ctx.headers, reqBody);
-		  // ctx.req.body = String| Buffer | Stream | null，修改请求的内容
-		  // 只有执行next方法后才可以把正常的请求发送出去
-		  // 如果需要自定义请求，可以通过全局的request方法操作
-		  // console.log(request); // TODO 
-		  // next方法可以设置next({ host, port });
-		  const { statusCode, headers } = await next(); 
-		  console.log(ctx.fullUrl, statusCode, headers);
-		  // const resBody = await ctx.getResBody();
-		  // const resText = await ctx.getResText();
-		  // ctx.status = 404; 修改响应状态码
-		  // ctx.set(headers); 批量修改响应头
-		  // ctx.set('x-test', 'abc'); 修改响应头
-		  // ctx.body = String| Buffer | Stream | null; 修改响应内容
-		};
-		
+	``` js
+	exports.handleRequest = async (ctx, request) => {
+		// ctx.fullUrl 可以获取请求url
+		// ctx.headers 可以获取请求头
+		// ctx.options 里面包含一些特殊的请求头字段，分别可以获取一些额外信息，如请设置的规则等
+		// ctx.method 获取和设置请求方法
+		// ctx.req
+		// ctx.res
+		const { req, res } = ctx;
+		const client = request((svrRes) => {
+			res.writeHead(svrRes.statusCode, svrRes.headers);
+			svrRes.pipe(res);
+		});
+		req.pipe(client);
+	};
+	```
 	在whistle的Rules配置界面上输入规则:
-	
-		# 这里不能用whistle.script，否则请求不会转发到handleRequest
-		# whistle.script只会执行handleXxxRules
-		# 你也可以通过在handleXxxRules里面设置 script://test(a,b,c)，实现转发
-		script://test www.ifeng.com www.qq.com www.baidu.com echo.websocket.org
-	
+	``` txt
+	# 这里不能用whistle.script，否则请求不会转发到handleRequest
+	# whistle.script只会执行handleXxxRules
+	# 你也可以通过在handleXxxRules里面设置 script://test(a,b,c)，实现转发
+	script://test www.ifeng.com www.qq.com www.baidu.com echo.websocket.org
+	```
 	分别访问[http://www.ifeng.com](http://www.ifeng.com)和[http://www.qq.com](http://www.qq.com)，可以在script的界面中的Consle看到打印出来的请求的url、响应状态吗和头部。
-	
+
 	具体效果见图：[demo2](https://user-images.githubusercontent.com/11450939/126302210-e3aa0b56-9001-4e03-83c8-8986d8f544ff.gif)
-	
+
 	需要在配置中带上参数，可以参考上面的规则设置
-
 2. 操作WebSocket请求(需要[开启HTTPs拦截](https://avwo.github.io/whistle/webui/https.html))
-``` js
-exports.handleWebSocket = async (ctx, connect) => {
-  const { socket } = ctx;
-  // 与服务器建立连接
-  const svrSocket = await connect();
-  // 客户端 pong 服务端
-  socket.on('pong', (data) => {
-  	svrSocket.pong(data);
-  });
-  // 客户端 ping 服务pong 端
-  socket.on('ping', (data) => {
-  	svrSocket.ping(data);
-  });
-  // 服务端 ping 客户端
-  svrSocket.on('ping', (data) => {
-  	socket.ping(data);
-  });
-  // 服务端 pong 客户端
-  svrSocket.on('pong', (data) => {
-  	socket.pong(data);
-  });
-  // 正常断开 WebSocket 连接
-  socket.on('disconnect', (code, message, opts) => {
-    console.log(code, 'client disconnect');
-    svrSocket.disconnect(code, message, opts);
-  });
-  // 正常断开 WebSocket 连接
-  svrSocket.on('disconnect', (code, message, opts) => {
-    console.log(code, 'server disconnect');
-    socket.disconnect(code, message, opts);
-  });
-  // 获取客户端解析后的帧数据
-  socket.on('message', (data, opts) => {
-    console.log(data, 'client data');
-    svrSocket.send(data, opts);
-  });
-  // 获取服务端解析后的帧数据
-  svrSocket.on('message', (data, opts) => {
-    console.log(data, 'server data');
-    socket.send(data, opts);
-  });
-};
+	``` js
+	exports.handleWebSocket = async (ctx, connect) => {
+		const { socket } = ctx;
+		// 与服务器建立连接
+		const svrSocket = await connect();
+		// 客户端 pong 服务端
+		socket.on('pong', (data) => {
+			svrSocket.pong(data);
+		});
+		// 客户端 ping 服务pong 端
+		socket.on('ping', (data) => {
+			svrSocket.ping(data);
+		});
+		// 服务端 ping 客户端
+		svrSocket.on('ping', (data) => {
+			socket.ping(data);
+		});
+		// 服务端 pong 客户端
+		svrSocket.on('pong', (data) => {
+			socket.pong(data);
+		});
+		// 正常断开 WebSocket 连接
+		socket.on('disconnect', (code, message, opts) => {
+			console.log(code, 'client disconnect');
+			svrSocket.disconnect(code, message, opts);
+		});
+		// 正常断开 WebSocket 连接
+		svrSocket.on('disconnect', (code, message, opts) => {
+			console.log(code, 'server disconnect');
+			socket.disconnect(code, message, opts);
+		});
+		// 获取客户端解析后的帧数据
+		socket.on('message', (data, opts) => {
+			console.log(data, 'client data');
+			svrSocket.send(data, opts);
+		});
+		// 获取服务端解析后的帧数据
+		svrSocket.on('message', (data, opts) => {
+			console.log(data, 'server data');
+			socket.send(data, opts);
+		});
+	};
 
-```
+	```
 
-	whistle规则配置同上，访问[https://www.websocket.org/echo.html](https://www.websocket.org/echo.html)，点击下面的connect按钮及send按钮，可以如下效果：[demo3](https://user-images.githubusercontent.com/11450939/126302243-26c8b4af-851c-4b00-87b9-3286e9e67251.gif)
-
+		whistle规则配置同上，访问[https://www.websocket.org/echo.html](https://www.websocket.org/echo.html)，点击下面的connect按钮及send按钮，可以如下效果：[demo3](https://user-images.githubusercontent.com/11450939/126302243-26c8b4af-851c-4b00-87b9-3286e9e67251.gif)
 3. 操作Tunnel请求
-
-		exports.handleTunnel = async (req, connect) => {
-		  const res = await connect();
-		  req.pipe(res).pipe(req);
-		};
-
+	``` js
+	exports.handleTunnel = async (req, connect) => {
+		const res = await connect();
+		req.pipe(res).pipe(req);
+	};
+	```
 	whistle规则配置同上
-
 # License
 
 [MIT](https://github.com/whistle-plugins/whistle.script/blob/master/LICENSE)

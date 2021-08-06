@@ -142,20 +142,41 @@ whistle.script为[whistle](https://github.com/avwo/whistle)的一个扩展脚本
 	需要在配置中带上参数，可以参考上面的规则设置
 
 2. 操作WebSocket请求(需要[开启HTTPs拦截](https://avwo.github.io/whistle/webui/https.html))
-
-		// Node < 7.6可以改用genrator和yield
-		exports.handleWebSocket = async (req, connect) => {
-		 // connect方法可以设置connect({ host, port });
-		 const res = await connect();
-		 res.on('message', (data) => {
-		   console.log('Received: ', data);
-		   req.send(data);
-		 });
-		 req.on('message', (data) => {
-		   console.log('Sent: ', data);
-		   res.send(data);
-		 });
-		};
+``` js
+exports.handleWebSocket = async (ctx, connect) => {
+  const { socket } = ctx;
+  // 与服务器建立连接
+  const svrSocket = await connect();
+  // 客户端 pong 服务pong 端
+  socket.on('pong', (data) => {
+  	svrSocket.pong(data);
+  });
+  // 服务端 ping 客户端
+  svrSocket.on('ping', (data) => {
+  	socket.ping(data);
+  });
+  // 正常断开 WebSocket 连接
+  socket.on('disconnect', (code, message, opts) => {
+    console.log(code, 'client disconnect');
+    svrSocket.disconnect(code, message, opts);
+  });
+  // 正常断开 WebSocket 连接
+  svrSocket.on('disconnect', (code, message, opts) => {
+    console.log(code, 'server disconnect');
+    socket.disconnect(code, message, opts);
+  });
+  // 获取客户端解析后的帧数据
+  socket.on('message', (data, opts) => {
+    console.log(data, 'client data');
+    svrSocket.send(data, opts);
+  });
+  // 获取服务端解析后的帧数据
+  svrSocket.on('message', (data, opts) => {
+    console.log(data, 'server data');
+    socket.send(data, opts);
+  });
+};
+```
 
 	whistle规则配置同上，访问[https://www.websocket.org/echo.html](https://www.websocket.org/echo.html)，点击下面的connect按钮及send按钮，可以如下效果：[demo3](https://user-images.githubusercontent.com/11450939/126302243-26c8b4af-851c-4b00-87b9-3286e9e67251.gif)
 

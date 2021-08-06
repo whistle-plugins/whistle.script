@@ -115,6 +115,12 @@ whistle.script为[whistle](https://github.com/avwo/whistle)的一个扩展脚本
 		const client = request((svrRes) => {
 			res.writeHead(svrRes.statusCode, svrRes.headers);
 			svrRes.pipe(res);
+			// try {
+				// const body = await ctx.getStreamBuffer(svrRes);
+				// delete svrRes.headers['content-encoding'];
+				// res.writeHead(svrRes.statusCode, svrRes.headers);
+				// res.end(body);
+			// } catch (err) {}
 		});
 		req.pipe(client);
 	};

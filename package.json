@@ -45,6 +45,7 @@
     "webpack": "^1.14.0"
   },
   "dependencies": {
+    "hparser": "^0.3.2",
     "iconv-lite": "^0.4.24",
     "koa": "^2.13.1",
     "koa-bodyparser": "^4.3.0",

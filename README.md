@@ -28,9 +28,7 @@ whistle.script为[whistle](https://github.com/avwo/whistle)的一个扩展脚本
 
 3. 安装script插件:
 
-		npm install -g whistle.script
-		# Mac、Linux用户可能需要加sudo
-		sudo npm install -g whistle.script
+		w2 i whistle.script
 
 # 使用
 

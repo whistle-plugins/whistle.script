@@ -159,12 +159,12 @@ whistle.script为[whistle](https://github.com/avwo/whistle)的一个扩展脚本
 		// 正常断开 WebSocket 连接
 		socket.on('disconnect', (code, message, opts) => {
 			console.log(code, 'client disconnect');
-			svrSocket.disconnect(code, message, opts);
+			svrSocket.disconnect(code, opts);
 		});
 		// 正常断开 WebSocket 连接
 		svrSocket.on('disconnect', (code, message, opts) => {
 			console.log(code, 'server disconnect');
-			socket.disconnect(code, message, opts);
+			socket.disconnect(code, opts);
 		});
 		// 获取客户端解析后的帧数据
 		socket.on('message', (data, opts) => {

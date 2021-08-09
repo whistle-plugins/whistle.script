@@ -139,8 +139,7 @@ whistle.script为[whistle](https://github.com/avwo/whistle)的一个扩展脚本
 	需要在配置中带上参数，可以参考上面的规则设置
 2. 操作WebSocket请求(需要[开启HTTPs拦截](https://avwo.github.io/whistle/webui/https.html))
 	``` js
-	exports.handleWebSocket = async (ctx, connect) => {
-		const { socket } = ctx;
+	exports.handleWebSocket = async (socket, connect) => {
 		// 与服务器建立连接
 		const svrSocket = await connect();
 		// 客户端 pong 服务端

@@ -18,7 +18,7 @@ whistle.script为[whistle](https://github.com/avwo/whistle)的一个扩展脚本
 
 # 安装
 
-1. 安装Node(>=6): [官网下载安装最新版本(LTS和Stable都可以)](https://nodejs.org/)
+1. 安装Node: [官网下载安装最新版本(LTS和Stable都可以)](https://nodejs.org/)
 2. 安装最新版的[whistle](https://github.com/avwo/whistle)。
 
 		npm install -g whistle
@@ -183,9 +183,9 @@ whistle.script为[whistle](https://github.com/avwo/whistle)的一个扩展脚本
 		whistle规则配置同上，访问[https://www.websocket.org/echo.html](https://www.websocket.org/echo.html)，点击下面的connect按钮及send按钮，可以如下效果：[demo3](https://user-images.githubusercontent.com/11450939/126302243-26c8b4af-851c-4b00-87b9-3286e9e67251.gif)
 3. 操作Tunnel请求
 	``` js
-	exports.handleTunnel = async (req, connect) => {
-		const res = await connect();
-		req.pipe(res).pipe(req);
+	exports.handleTunnel = async (socket, connect) => {
+		const svrSocket = await connect();
+		socket.pipe(svrSocket).pipe(socket);
 	};
 	```
 	whistle规则配置同上

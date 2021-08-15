@@ -193,8 +193,7 @@ whistle.script为[whistle](https://github.com/avwo/whistle)的一个扩展脚本
 
 [MIT](https://github.com/whistle-plugins/whistle.script/blob/master/LICENSE)
 
-
-
-
+# 如何引入第三方模块
+使用绝对路径引入，如假设你的模块安装路径为 `/Users/test/node_modules/xxx`，则可以在脚本里面通过 `require('/Users/test/node_modules/xxx')` 引入。
 
 

@@ -1,0 +1,1 @@
+* whistle.script:// includeFilter://reqH.x-whistle-.script-policy=remote

@@ -189,6 +189,18 @@ whistle.script为[whistle](https://github.com/avwo/whistle)的一个扩展脚本
 	};
 	```
 	whistle规则配置同上
+
+4. 鉴权
+插件 `v1.2.0` 版本开始支持自定义鉴权方法（要求 Whistle 版本 >= `v2.7.16`）：
+``` js
+exports.auth = async (req, options) => {
+	// 给请求添加自定义头，必须与 `x-whistle-` 开头
+	// 这样可以在插件的其他 hook 里面获取到该请求头（除了 http 请求的 reqRead 钩子）
+	req.setHeader('x-whistle-test', '1111111111');
+	// return false; // 直接返回 403
+};
+```
+
 # License
 
 [MIT](https://github.com/whistle-plugins/whistle.script/blob/master/LICENSE)

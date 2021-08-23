@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 module.exports = (router) => {
   router.get('/auth2', (ctx) => {
-    ctx.body = { ahth: false };
+    ctx.body = { auth: false };
   });
   router.get('/auth', (ctx) => {
     ctx.body = {

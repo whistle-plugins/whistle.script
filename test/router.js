@@ -12,7 +12,7 @@ module.exports = (router) => {
   });
   router.get('/req-rules', (ctx) => {
     ctx.body = {
-      rules: '* file://(hello)',
+      rules: '* reqHeaders://(hello=2222rrrrr)',
     };
   });
   router.get('/res-rules', (ctx) => {

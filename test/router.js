@@ -24,7 +24,7 @@ module.exports = (router) => {
     const { req } = ctx;
     let body;
     req.on('data', (chunk) => {
-      body = body ? Buffer.concat([chunk, body]) : chunk;
+      body = body ? Buffer.concat([body, chunk]) : chunk;
     });
     req.on('end', () => {
       try {
@@ -39,7 +39,7 @@ module.exports = (router) => {
     const { req } = ctx;
     let body;
     req.on('data', (chunk) => {
-      body = body ? Buffer.concat([chunk, body]) : chunk;
+      body = body ? Buffer.concat([body, chunk]) : chunk;
     });
     req.on('end', () => {
       try {

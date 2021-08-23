@@ -17,11 +17,22 @@ module.exports = (router) => {
   });
   router.get('/res-rules', (ctx) => {
     ctx.body = {
-      rules: '* status://666',
+      rules: '* status://666 resHeaders://x-test=3333333',
     };
   });
-  router.get('/stats', (ctx) => {
-    console.log(ctx.headers);
+  router.post('/stats', (ctx) => {
+    const { req } = ctx;
+    let body;
+    req.on('data', (chunk) => {
+      body = body ? Buffer.concat([chunk, body]) : chunk;
+    });
+    req.on('end', () => {
+      try {
+        body = body && JSON.parse(body.toString());
+      } catch (e) {
+        console.log(e, '===========');
+      }
+    });
     ctx.body = '';
   });
   router.post('/data', (ctx) => {
@@ -31,7 +42,11 @@ module.exports = (router) => {
       body = body ? Buffer.concat([chunk, body]) : chunk;
     });
     req.on('end', () => {
-      console.log(body && JSON.parse(body.toString()));
+      try {
+        body = body && JSON.parse(body.toString());
+      } catch (e) {
+        console.log(e);
+      }
     });
     ctx.body = '';
   });

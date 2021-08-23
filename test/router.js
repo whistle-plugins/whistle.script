@@ -24,7 +24,7 @@ module.exports = (router) => {
     console.log(ctx.headers);
     ctx.body = '';
   });
-  router.get('/data', (ctx) => {
+  router.post('/data', (ctx) => {
     const { req } = ctx;
     let body;
     req.on('data', (chunk) => {

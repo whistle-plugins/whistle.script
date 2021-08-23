@@ -21,8 +21,8 @@
   },
   "scripts": {
     "dev": "webpack --config ./src/webpack.config.js -w",
-    "lint": "eslint ./lib index.js",
-    "lintfix": "eslint --fix ./lib index.js"
+    "lint": "eslint ./lib test index.js",
+    "lintfix": "eslint --fix ./lib test index.js"
   },
   "devDependencies": {
     "babel-core": "^6.7.6",

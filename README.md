@@ -201,6 +201,60 @@ exports.auth = async (req, options) => {
 };
 ```
 
+5. pipe
+插件 `v1.2.1` 版本开始支持自定义 pipe 方法：
+``` js
+
+exports.handleReqRead = (req, res, options) => {
+  req.pipe(res);
+};
+
+exports.handleReqWrite = (req, res, options) => {
+  req.pipe(res);
+};
+
+exports.handleResRead = (req, res, options) => {
+  req.pipe(res);
+};
+
+exports.handleResWrite = (req, res, options) => {
+  req.pipe(res);
+};
+
+exports.handleWsReqRead = (req, res, options) => {
+  req.pipe(res);
+};
+
+exports.handleWsReqWrite = (req, res, options) => {
+  req.pipe(res);
+};
+
+exports.handleWsResRead = (req, res, options) => {
+  req.pipe(res);
+};
+
+exports.handleWsResWrite = (req, res, options) => {
+  req.pipe(res);
+};
+
+exports.handleTunnelReqRead = (req, res, options) => {
+  req.pipe(res);
+};
+
+exports.handleTunnelReqWrite = (req, res, options) => {
+  req.pipe(res);
+};
+
+exports.handleTunnelResRead = (req, res, options) => {
+  req.pipe(res);
+};
+
+exports.handleTunnelResWrite = (req, res, options) => {
+  req.pipe(res);
+};
+
+```
+
 # 如何引入第三方模块
 使用绝对路径引入，如假设你的模块安装路径为 `/Users/test/node_modules/xxx`，则可以在脚本里面通过 `require('/Users/test/node_modules/xxx')` 引入。
 

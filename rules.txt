@@ -1,1 +1,2 @@
 * whistle.script:// includeFilter://reqH.x-whistle-.script-policy=remote
+* sniCallback://script includeFilter://reqH.x-whistle-.script-policy=sni

@@ -15,6 +15,9 @@
     "ssi"
   ],
   "registry": "https://github.com/whistle-plugins/whistle.script",
+  "whistleConfig": {
+    "pluginVars": true
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/whistle-plugins/whistle.script.git"

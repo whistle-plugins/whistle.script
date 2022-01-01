@@ -1,2 +1,2 @@
-* whistle.script:// delete://reqH.x-whistle-.script-auth-url|reqH.x-whistle-.script-req-rules-url|reqH.x-whistle-.script-res-rules-url|reqH.x-whistle-.script-stats-url|reqH.x-whistle-.script-data-url includeFilter://reqH.x-whistle-.script-policy=remote
-* sniCallback://script delete://reqH.x-whistle-.script-policy includeFilter://reqH.x-whistle-.script-policy=sni
+* whistle.script:// delete://reqH.x-whistle-.script-policy|reqH.x-whistle-.script-auth-url|reqH.x-whistle-.script-req-rules-url|reqH.x-whistle-.script-res-rules-url|reqH.x-whistle-.script-stats-url|reqH.x-whistle-.script-data-url includeFilter://reqH.x-whistle-.script-policy=remote
+* sniCallback://script delete://reqH.x-whistle-.script-policy|reqH.x-whistle-.script-sni-url includeFilter://reqH.x-whistle-.script-policy=sni

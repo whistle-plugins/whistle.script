@@ -116,20 +116,20 @@ whistle.script为[whistle](https://github.com/avwo/whistle)的一个扩展脚本
 			delete req.headers['accept-encoding'];
 			let body;
 			svrRes.on('data', (data) => {
-			body = body ? Buffer.concat([body, data]) : data;
+				body = body ? Buffer.concat([body, data]) : data;
 			});
 			svrRes.on('end', () => {
-			try {
-				// 获取到服务器返回体json格式，进行你想要的处理
-				const jsonBody = JSON.parse(body.toString())
-				const wrappedBody = {
-					code: body.code || svrRes.statusCode,
-					result: jsonBody
-				}
-				res.end(Buffer.from(JSON.stringify(wrappedBody)))
-			} catch(e) {
-				res.end(body);
-			}      
+				try {
+					// 获取到服务器返回体json格式，进行你想要的处理
+					const jsonBody = JSON.parse(body.toString())
+					const wrappedBody = {
+						code: body.code || svrRes.statusCode,
+						result: jsonBody
+					}
+					res.end(Buffer.from(JSON.stringify(wrappedBody)))
+				} catch(e) {
+					res.end(body);
+				}      
 			});
 		});
 		req.pipe(client);

@@ -102,23 +102,35 @@ whistle.script为[whistle](https://github.com/avwo/whistle)的一个扩展脚本
 
 1. 操作HTTP或HTTPs请求(操作HTTPs需要[开启HTTPs拦截](https://avwo.github.io/whistle/webui/https.html))
 	``` js
-	exports.handleRequest = async (ctx, request) => {
+	exports.handleRequest = (ctx, request) => {
 		// ctx.fullUrl 可以获取请求url
 		// ctx.headers 可以获取请求头
 		// ctx.options 里面包含一些特殊的请求头字段，分别可以获取一些额外信息，如请设置的规则等
 		// ctx.method 获取和设置请求方法
 		// ctx.req
 		// ctx.res
-		const { req, res } = ctx;
+		const {req, res} = ctx;
 		const client = request((svrRes) => {
-			res.writeHead(svrRes.statusCode, svrRes.headers);
-			svrRes.pipe(res);
-			// try {
-				// const body = await ctx.getStreamBuffer(svrRes);
-				// delete svrRes.headers['content-encoding'];
-				// res.writeHead(svrRes.statusCode, svrRes.headers);
-				// res.end(body);
-			// } catch (err) {}
+			// 由于内容长度可能有变，删除长度自动改成 chunked
+			delete svrRes.headers['content-length'];
+			delete req.headers['accept-encoding'];
+			let body;
+			svrRes.on('data', (data) => {
+			body = body ? Buffer.concat([body, data]) : data;
+			});
+			svrRes.on('end', () => {
+			try {
+				// 获取到服务器返回体json格式，进行你想要的处理
+				const jsonBody = JSON.parse(body.toString())
+				const wrappedBody = {
+					code: body.code || svrRes.statusCode,
+					result: jsonBody
+				}
+				res.end(Buffer.from(JSON.stringify(wrappedBody)))
+			} catch(e) {
+				res.end(body);
+			}      
+			});
 		});
 		req.pipe(client);
 	};

@@ -1,49 +1,49 @@
 # whistle.script
-whistle.script为[whistle](https://github.com/avwo/whistle)的一个扩展脚本插件，可以直接在界面上引用全局安装的Node模块及Node的内容模块编写脚本操作请求及其响应，所有正常Node程序可以实现的功能，都可以通过该插件实现，包括：
+whistle.script 为 [whistle](https://github.com/avwo/whistle) 的一个扩展脚本插件，可以直接在界面上引用全局安装的Node模块及Node的内容模块编写脚本操作请求及其响应，所有正常 Node 程序可以实现的功能，都可以通过该插件实现，包括：
 
 1. HTTP[s]:
-   - 动态设置[whistle规则](https://avwo.github.io/whistle/rules/)
+   - 动态设置 [whistle 规则](https://avwo.github.io/whistle/rules/)
    - 拦截请求响应
    - 控制请求响应速度
    - 修改请求url、请求方法、请求头、请求内容
    - 修改响应状态码、响应头、响应内容
    - 在插件界面的Console上显示脚本程序 `console.xxx` 的内容，如果可以打印响应的内容或调试信息等
 2. WebSocket:
-   - 动态设置[whistle规则](https://avwo.github.io/whistle/rules/)
+   - 动态设置 [ whistle 规则](https://avwo.github.io/whistle/rules/)
    - 拦截请求响应
    - 修改发送或收到的数据
-   - 直接向WebSocket客户端或服务端发送数据
-   - 在插件界面的Console上显示脚本程序 `console.xxx` 的内容，如果可以打印发送和接收到的数据或调试信息等，从而通过该插件可以直接查看WebSocket的数据
-3. Tunnel: 基本功能同WebSocket，可以用来直接操作Socket请求，如Protobuf协议的请求等
+   - 直接向 WebSocket 客户端或服务端发送数据
+   - 在插件界面的 Console 上显示脚本程序 `console.xxx` 的内容，如果可以打印发送和接收到的数据或调试信息等，从而通过该插件可以直接查看WebSocket的数据
+3. Tunnel: 基本功能同 WebSocket，可以用来直接操作 Socket 请求，如 Protobuf 协议的请求等
 
 # 安装
 
 1. 安装Node: [官网下载安装最新版本(LTS和Stable都可以)](https://nodejs.org/)
-2. 安装最新版的[whistle](https://github.com/avwo/whistle)。
+2. 安装最新版的 [whistle](https://github.com/avwo/whistle)。
+	``` sh
+  npm install -g whistle
+	```
+   > Mac 或 Linux 用户可能需要加 sudo：`sudo npm install -g whistle`
 
-		npm install -g whistle
-		
-		# Mac、Linux用户可能需要加sudo
-		sudo npm install -g whistle
-
-3. 安装script插件:
-
-		w2 i whistle.script
+3. 安装 script 插件:
+	``` sh
+  w2 i whistle.script
+	```
 
 # 使用
 
 打开script插件的界面，创建一个名字为 `test` 的脚本:
 
-1. 可以通过 `Plugins->Home->script`打开或右键并选择 `在新标签页中打开` 
+1. 可以通过 `Plugins -> Home -> script` 打开或右键并选择 `在新标签页中打开` 
 2. 直接访问 [http://local.whistlejs.com/plugin.script](http://local.whistlejs.com/plugin.script/)
 
- ![whistle.script界面](https://user-images.githubusercontent.com/11450939/126302159-0c533ea7-3bc0-484a-bd30-698d5a7881df.gif)
+ ![whistle.script 界面](https://user-images.githubusercontent.com/11450939/126302159-0c533ea7-3bc0-484a-bd30-698d5a7881df.gif)
 
 #### 设置规则
 
-1. 设置HTTP或HTTPs请求的[whistle规则](https://avwo.github.io/whistle/rules/)(操作HTTPs需要[开启HTTPs拦截](https://avwo.github.io/whistle/webui/https.html))
+1. 设置 HTTP 或 HTTPS 请求的 [whistle 规则](https://avwo.github.io/whistle/rules/)(操作 HTTPS 需要[开启 HTTPS 拦截](https://avwo.github.io/whistle/webui/https.html))
 
-	在界面中的`test` 脚本输入(也可以在其它编辑器编辑后再copy进来):
+	在界面中的 `test` 脚本输入(也可以在其它编辑器编辑后再copy进来):
 	
 		exports.handleRequestRules = (ctx) => {
 			// ctx.fullUrl 可以获取请求url
@@ -59,7 +59,7 @@ whistle.script为[whistle](https://github.com/avwo/whistle)的一个扩展脚本
 	
 		whistle.script://test www.ifeng.com www.qq.com www.baidu.com echo.websocket.org
 	
-	分别访问[http://www.ifeng.com](http://www.ifeng.com)和[http://www.qq.com](http://www.qq.com)，前者可以正常访问，后者输出 `Hello world.`。
+	分别访问 [http://www.ifeng.com](http://www.ifeng.com) 和 [http://www.qq.com](http://www.qq.com)，前者可以正常访问，后者输出 `Hello world.`。
 	
 	具体效果见图：[demo1](https://user-images.githubusercontent.com/11450939/126302225-2598772c-d6a3-45e3-97d6-685fbed1ba37.gif)
 	
@@ -75,7 +75,7 @@ whistle.script为[whistle](https://github.com/avwo/whistle)的一个扩展脚本
 		  ctx.values = { 'test.html': 'Hello world.' };
 		};
 
-2. 设置WebSocket请求的规则(需要[开启HTTPs拦截](https://avwo.github.io/whistle/webui/https.html)):
+2. 设置WebSocket请求的规则(需要[开启 HTTPS 拦截](https://avwo.github.io/whistle/webui/https.html)):
 
 		exports.handleWebSocketRules = (ctx) => {
 		  // ctx.fullUrl 可以获取请求url
@@ -86,7 +86,7 @@ whistle.script为[whistle](https://github.com/avwo/whistle)的一个扩展脚本
 
 	接下来的操作同上。
 
-3. 设置Tunnel请求的规则(要测试可以暂时[关闭HTTPs拦截](https://avwo.github.io/whistle/webui/https.html)):
+3. 设置Tunnel请求的规则(要测试可以暂时[关闭 HTTPS 拦截](https://avwo.github.io/whistle/webui/https.html)):
 
 		exports.handleTunnel = (ctx) => {
 		  // ctx.fullUrl 可以获取请求url
@@ -100,7 +100,7 @@ whistle.script为[whistle](https://github.com/avwo/whistle)的一个扩展脚本
 
 #### 操作请求
 
-1. 操作HTTP或HTTPs请求(操作HTTPs需要[开启HTTPs拦截](https://avwo.github.io/whistle/webui/https.html))
+1. 操作HTTP或 HTTPS 请求(操作 HTTPS 需要[开启 HTTPS 拦截](https://avwo.github.io/whistle/webui/https.html))
 	``` js
 	exports.handleRequest = (ctx, request) => {
 		// ctx.fullUrl 可以获取请求url
@@ -147,7 +147,7 @@ whistle.script为[whistle](https://github.com/avwo/whistle)的一个扩展脚本
 	具体效果见图：[demo2](https://user-images.githubusercontent.com/11450939/126302210-e3aa0b56-9001-4e03-83c8-8986d8f544ff.gif)
 
 	需要在配置中带上参数，可以参考上面的规则设置
-2. 操作WebSocket请求(需要[开启HTTPs拦截](https://avwo.github.io/whistle/webui/https.html))
+2. 操作 WebSocket 请求(需要[开启 HTTPS 拦截](https://avwo.github.io/whistle/webui/https.html))
 	``` js
 	exports.handleWebSocket = async (socket, connect) => {
 		// 与服务器建立连接
@@ -189,7 +189,7 @@ whistle.script为[whistle](https://github.com/avwo/whistle)的一个扩展脚本
 			socket.send(data, opts);
 		});
 	};
-
+	
 	```
 
 		whistle规则配置同上，访问[https://www.websocket.org/echo.html](https://www.websocket.org/echo.html)，点击下面的connect按钮及send按钮，可以如下效果：[demo3](https://user-images.githubusercontent.com/11450939/126302243-26c8b4af-851c-4b00-87b9-3286e9e67251.gif)
@@ -272,5 +272,5 @@ exports.handleTunnelResWrite = (req, res, options) => {
 
 # License
 
-[MIT](https://github.com/whistle-plugins/whistle.script/blob/master/LICENSE)
+[MIT](./LICENSE)
 
